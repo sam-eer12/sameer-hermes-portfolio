@@ -1504,7 +1504,7 @@ export function MarketingFooterReveal() {
         } as React.CSSProperties
       }
     >
-      <footer className="hw-footer-soften bg-hermes text-[var(--hw-fg)] md:sticky md:top-0 md:flex md:min-h-dvh md:translate-y-[var(--hw-footer-lift,0px)] md:flex-col md:pb-[var(--hw-frame)] md:motion-reduce:translate-y-0">
+      <footer className="hw-footer-soften bg-hermes text-[var(--hw-fg)] md:sticky md:top-0 md:flex md:h-dvh md:max-h-dvh md:translate-y-[var(--hw-footer-lift,0px)] md:flex-col md:justify-between md:overflow-hidden md:pb-[var(--hw-frame)] md:motion-reduce:translate-y-0">
         <div className="hw-footer-art-stage bg-inherit">
           <div className="hw-noise absolute inset-0">
             <img
@@ -1531,8 +1531,8 @@ export function MarketingFooterReveal() {
           </div>
         </div>
 
-        <div className="relative z-20 mx-auto w-full max-w-[calc(var(--hw-teams-col)+2*var(--hw-teams-pad-x))] px-[var(--hw-teams-pad-x)] pt-3">
-          <div className="hw-teams-footer-grid font-[family-name:var(--font-mono)] uppercase relative grid grid-cols-2 gap-x-6 gap-y-10 pb-10 text-[length:var(--hw-teams-label-sm)] leading-none tracking-normal md:grid-cols-[minmax(0,320px)_repeat(4,minmax(0,1fr))] md:gap-5">
+        <div className="relative z-20 shrink-0 mx-auto w-full max-w-[calc(var(--hw-teams-col)+2*var(--hw-teams-pad-x))] px-[var(--hw-teams-pad-x)] pt-3">
+          <div className="hw-teams-footer-grid font-[family-name:var(--font-mono)] uppercase relative grid grid-cols-2 gap-x-6 gap-y-8 pb-6 text-[length:var(--hw-teams-label-sm)] leading-none tracking-normal md:grid-cols-[minmax(0,320px)_repeat(4,minmax(0,1fr))] md:gap-5">
             <div className="flex flex-col gap-5 max-md:col-span-2">
               <NousOutlineFooterLogo />
               <p className="hw-mono text-[length:var(--hw-fs-xs)] leading-[1.4] tracking-[0.04em] text-[color:var(--hw-fg-muted)] uppercase">
@@ -1582,7 +1582,7 @@ export function MarketingFooterReveal() {
             ))}
           </div>
 
-          <div className="py-10 border-t border-white/20 flex flex-wrap items-center justify-between gap-4 hw-mono text-[11px] uppercase opacity-75">
+          <div className="py-5 border-t border-white/20 flex flex-wrap items-center justify-between gap-4 hw-mono text-[11px] uppercase opacity-75">
             <div className="flex items-center gap-4">
               <a
                 href="https://github.com/sam-eer12"
