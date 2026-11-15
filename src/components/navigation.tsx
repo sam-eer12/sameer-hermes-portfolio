@@ -802,7 +802,7 @@ export function MarketingPaperNav() {
       ? new IntersectionObserver(
           (entries) => {
             for (const entry of entries) {
-              panelActive = entry.isIntersecting;
+              panelActive = entry.isIntersecting || entry.boundingClientRect.top <= 40;
             }
             sync();
           },

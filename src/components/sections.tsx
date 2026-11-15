@@ -1401,18 +1401,6 @@ interface FooterNavColumn {
 
 const FOOTER_COLUMNS: FooterNavColumn[] = [
   {
-    category: "Research",
-    title: "Models",
-    items: [
-      { label: "ChadGPT 250M", href: "https://huggingface.co/sam-eer12/chadGPT", external: true },
-      { label: "Project SLM", href: "https://github.com/sam-eer12/projectSLM", external: true },
-      { label: "3D Shader Studio", href: "#downloads" },
-      { label: "Technical Matrix", href: "#portal" },
-      { label: "Experience & FAQ", href: "#faqs" },
-      { label: "Contact", href: "#contact" },
-    ],
-  },
-  {
     category: "Products",
     title: "Projects",
     items: [
@@ -1422,18 +1410,6 @@ const FOOTER_COLUMNS: FooterNavColumn[] = [
       { label: "VigilAI", href: "https://github.com/sam-eer12/VigilAI-survillance-project", external: true },
       { label: "Amicus AI", href: "https://amicusai.vercel.app/", external: true },
       { label: "Via Terminal", href: "#install" },
-    ],
-  },
-  {
-    category: "Resources",
-    title: "Community",
-    items: [
-      { prefix: "Go to ", label: "GitHub", href: "https://github.com/sam-eer12", external: true },
-      { prefix: "Go to ", label: "Hugging Face", href: "https://huggingface.co/sam-eer12", external: true },
-      { prefix: "Go to ", label: "LinkedIn", href: "https://www.linkedin.com/in/sameer-gupta-768b28312", external: true },
-      { prefix: "Go to ", label: "BitChord PR", href: "https://github.com/kushagrasinghx/BitChord/pull/1414", external: true },
-      { prefix: "Go to ", label: "SIH2026 Repo", href: "https://github.com/sam-eer12/sih2026", external: true },
-      { prefix: "Go to ", label: "Legacy Site", href: "https://sameers-portfolio-eosin.vercel.app/", external: true },
     ],
   },
   {
@@ -1449,6 +1425,30 @@ const FOOTER_COLUMNS: FooterNavColumn[] = [
       { label: "Email Sameer", href: "mailto:sameer870732@gmail.com" },
       { label: "+91 9899901635", href: "tel:+919899901635" },
       { label: "Back to Top", href: "#top" },
+    ],
+  },
+  {
+    category: "Research",
+    title: "Models",
+    items: [
+      { label: "ChadGPT 250M", href: "https://huggingface.co/sam-eer12/chadGPT", external: true },
+      { label: "Project SLM", href: "https://github.com/sam-eer12/projectSLM", external: true },
+      { label: "3D Shader Studio", href: "#downloads" },
+      { label: "Technical Matrix", href: "#portal" },
+      { label: "Experience & FAQ", href: "#faqs" },
+      { label: "Contact", href: "#contact" },
+    ],
+  },
+  {
+    category: "Resources",
+    title: "Community",
+    items: [
+      { prefix: "Go to ", label: "GitHub", href: "https://github.com/sam-eer12", external: true },
+      { prefix: "Go to ", label: "Hugging Face", href: "https://huggingface.co/sam-eer12", external: true },
+      { prefix: "Go to ", label: "LinkedIn", href: "https://www.linkedin.com/in/sameer-gupta-768b28312", external: true },
+      { prefix: "Go to ", label: "BitChord PR", href: "https://github.com/kushagrasinghx/BitChord/pull/1414", external: true },
+      { prefix: "Go to ", label: "SIH2026 Repo", href: "https://github.com/sam-eer12/sih2026", external: true },
+      { prefix: "Go to ", label: "Legacy Site", href: "https://sameers-portfolio-eosin.vercel.app/", external: true },
     ],
   },
 ];
@@ -1504,7 +1504,7 @@ export function MarketingFooterReveal() {
         } as React.CSSProperties
       }
     >
-      <footer className="hw-footer-soften bg-hermes text-[var(--hw-fg)] md:sticky md:top-0 md:flex md:h-dvh md:max-h-dvh md:translate-y-[var(--hw-footer-lift,0px)] md:flex-col md:justify-between md:overflow-hidden md:pb-[var(--hw-frame)] md:motion-reduce:translate-y-0">
+      <footer className="hw-footer-soften bg-hermes text-[var(--hw-fg)] md:sticky md:top-0 md:flex md:min-h-dvh md:translate-y-[var(--hw-footer-lift,0px)] md:flex-col md:pb-[var(--hw-frame)] md:motion-reduce:translate-y-0">
         <div className="hw-footer-art-stage bg-inherit">
           <div className="hw-noise absolute inset-0">
             <img
@@ -1531,8 +1531,8 @@ export function MarketingFooterReveal() {
           </div>
         </div>
 
-        <div className="relative z-20 shrink-0 mx-auto w-full max-w-[calc(var(--hw-teams-col)+2*var(--hw-teams-pad-x))] px-[var(--hw-teams-pad-x)] pt-3">
-          <div className="hw-teams-footer-grid font-[family-name:var(--font-mono)] uppercase relative grid grid-cols-2 gap-x-6 gap-y-8 pb-6 text-[length:var(--hw-teams-label-sm)] leading-none tracking-normal md:grid-cols-[minmax(0,320px)_repeat(4,minmax(0,1fr))] md:gap-5">
+        <div className="relative z-20 mx-auto w-full max-w-[calc(var(--hw-teams-col)+2*var(--hw-teams-pad-x))] px-[var(--hw-teams-pad-x)] pt-3">
+          <div className="hw-teams-footer-grid font-[family-name:var(--font-mono)] uppercase relative grid grid-cols-2 gap-x-6 gap-y-10 pb-10 text-[length:var(--hw-teams-label-sm)] leading-none tracking-normal md:grid-cols-[minmax(0,320px)_repeat(4,minmax(0,1fr))] md:gap-5">
             <div className="flex flex-col gap-5 max-md:col-span-2">
               <NousOutlineFooterLogo />
               <p className="hw-mono text-[length:var(--hw-fs-xs)] leading-[1.4] tracking-[0.04em] text-[color:var(--hw-fg-muted)] uppercase">
@@ -1582,7 +1582,7 @@ export function MarketingFooterReveal() {
             ))}
           </div>
 
-          <div className="py-5 border-t border-white/20 flex flex-wrap items-center justify-between gap-4 hw-mono text-[11px] uppercase opacity-75">
+          <div className="py-6 border-t border-white/20 flex flex-wrap items-center justify-between gap-4 hw-mono text-[11px] uppercase opacity-75">
             <div className="flex items-center gap-4">
               <a
                 href="https://github.com/sam-eer12"

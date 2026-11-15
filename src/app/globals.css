@@ -568,17 +568,10 @@ html[data-marketing-theme="dark"] .arsenal-card[data-featured="true"] {
   position: relative;
   isolation: isolate;
   width: 100%;
+  height: 40dvh;
+  min-height: 240px;
+  max-height: 360px;
   flex: 1 1 auto;
-  min-height: 260px;
-}
-
-@media (max-width: 767px) {
-  .hw-footer-art-stage {
-    height: 38dvh;
-    min-height: 220px;
-    max-height: 320px;
-    flex: 0 0 auto;
-  }
 }
 
 .hw-teams-footer-grid {
@@ -588,10 +581,35 @@ html[data-marketing-theme="dark"] .arsenal-card[data-featured="true"] {
   align-items: start;
 }
 
+@media (max-width: 767px) {
+  .hw-teams-footer-grid > :first-child {
+    grid-column: span 2 / span 2;
+  }
+}
+
 @media (min-width: 768px) {
+  /* Lock desktop sticky footer to exact 100dvh so PaperFooter clears cleanly and no dark gap appears below */
+  #footer > footer.hw-footer-soften {
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+  }
+
+  .hw-footer-art-stage {
+    height: auto;
+    min-height: 220px;
+    max-height: none;
+    flex: 1 1 auto;
+  }
+
   .hw-teams-footer-grid {
     grid-template-columns: minmax(180px, 260px) repeat(4, minmax(0, 1fr)) !important;
     gap: 1.5rem !important;
+    padding-bottom: 1.75rem !important;
   }
 }
 
