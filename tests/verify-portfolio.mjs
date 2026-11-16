@@ -217,4 +217,11 @@ test("Next.js SSR HTML output includes preloader, portfolio markup, Three.js her
     html,
     /meta name="google-site-verification" content="z89_y2w8b2a0dGcpC0S3hy4ObEPHA1A09Ts5T3aHZEU"/
   );
+
+  const sitemapPath = path.join(ROOT, "public", "sitemap.xml");
+  assert.ok(fs.existsSync(sitemapPath), "public/sitemap.xml must exist");
+  const sitemapXml = fs.readFileSync(sitemapPath, "utf8");
+  assert.match(sitemapXml, /<loc>https:\/\/sameerg\.vercel\.app\/<\/loc>/);
+  assert.match(sitemapXml, /<image:loc>https:\/\/sameerg\.vercel\.app\/og-thumbnail\.jpg<\/image:loc>/);
+  assert.match(sitemapXml, /Sameer_Gupta_Resume\.pdf/);
 });
