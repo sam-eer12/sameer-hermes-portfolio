@@ -6,28 +6,92 @@ import "./globals.css";
 const NOUS_CDN =
   "https://web-assets.nousresearch.com/marketing/64ae3d30463049bd9e6f380cda9cd9538a0f4edb";
 
+const SITE_URL = "https://sameerg.vercel.app";
+const SITE_TITLE = "Sameer Gupta | AI, Computer Vision & Fullstack Engineer";
+const SITE_DESCRIPTION =
+  "Portfolio of Sameer Gupta (NSUT Delhi). Creator of the ChadGPT 250M language model, NEXA DRDO 2.5D LiDAR perception (SIH 2026), AeroRoute, VigilAI, and BitChord.";
+
 export const metadata: Metadata = {
-  title: "Sameer Gupta | AI Systems, LLMs & Interactive 3D Engineering",
-  description:
-    "Portfolio of Sameer Gupta (NSUT Delhi '28) - creator of ChadGPT 250M SLM on Hugging Face, AeroRoute, NEXA (SIH2026 DRDO LiDAR), VigilAI, Amicus AI, BitChord, and interactive Three.js GLSL sculptures.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_TITLE,
+    template: "%s | Sameer Gupta",
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: "Sameer Gupta Portfolio",
+  keywords: [
+    "Sameer Gupta",
+    "Sameer Gupta portfolio",
+    "Sameer Gupta NSUT",
+    "Sameer Gupta NSUT Delhi",
+    "sam-eer12",
+    "sameer870732",
+    "ChadGPT 250M",
+    "ChadGPT SLM",
+    "ProjectSLM PyTorch",
+    "NEXA SIH2026 DRDO LiDAR",
+    "AeroRoute",
+    "VigilAI surveillance YOLOv11",
+    "Amicus AI",
+    "BitChord contributor",
+    "GirlScript Summer of Code Sameer Gupta",
+    "Google Gemini Student Ambassador NSUT",
+    "AI engineer India",
+    "Machine learning portfolio Next.js Three.js",
+    "Custom language model from scratch PyTorch",
+  ],
+  authors: [{ name: "Sameer Gupta", url: SITE_URL }],
+  creator: "Sameer Gupta",
+  publisher: "Sameer Gupta",
+  category: "Technology",
+  alternates: {
+    canonical: SITE_URL,
+  },
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
     shortcut: "/favicon.svg",
   },
   openGraph: {
-    title: "Sameer Gupta | AI Systems, LLMs & Interactive 3D Engineering",
-    description:
-      "Custom 250M language models trained from scratch, real-time 2.5D LiDAR & computer vision, AeroRoute mobility engine, BitChord open-source contributions, and interactive Three.js 3D WebGL sculptures.",
-    url: "https://sameers-portfolio-eosin.vercel.app/",
     type: "website",
+    locale: "en_US",
+    url: SITE_URL,
+    siteName: "Sameer Gupta",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [
+      {
+        url: "/og-thumbnail.jpg",
+        width: 1024,
+        height: 573,
+        alt: "Sameer Gupta Portfolio - Classical Marble Bust with Cosmic Ring",
+        type: "image/jpeg",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sameer Gupta | AI & 3D WebGL Portfolio",
-    description:
-      "Custom 250M LLM (ChadGPT), AeroRoute, NEXA (SIH2026), VigilAI, Amicus AI, BitChord, and Three.js interactive cosmic bust.",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [
+      {
+        url: "/og-thumbnail.jpg",
+        width: 1024,
+        height: 573,
+        alt: "Sameer Gupta Portfolio - Classical Marble Bust with Cosmic Ring",
+      },
+    ],
   },
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export const viewport: Viewport = {
@@ -43,15 +107,50 @@ const JSON_LD = {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "Person",
-      "@id": "https://sameers-portfolio-eosin.vercel.app/#person",
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
       name: "Sameer Gupta",
+      description: SITE_DESCRIPTION,
+      publisher: { "@id": `${SITE_URL}/#person` },
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${SITE_URL}/#webpage`,
+      url: SITE_URL,
+      name: SITE_TITLE,
+      description: SITE_DESCRIPTION,
+      isPartOf: { "@id": `${SITE_URL}/#website` },
+      about: { "@id": `${SITE_URL}/#person` },
+      primaryImageOfPage: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/og-thumbnail.jpg`,
+        width: 1024,
+        height: 573,
+      },
+    },
+    {
+      "@type": "Person",
+      "@id": `${SITE_URL}/#person`,
+      name: "Sameer Gupta",
+      jobTitle: "AI & Fullstack Engineer",
       email: "mailto:sameer870732@gmail.com",
-      url: "https://sameers-portfolio-eosin.vercel.app/",
+      url: SITE_URL,
+      image: `${SITE_URL}/og-thumbnail.jpg`,
       affiliation: {
         "@type": "CollegeOrUniversity",
         name: "Netaji Subhas University of Technology (NSUT), Delhi",
       },
+      knowsAbout: [
+        "Small Language Models",
+        "PyTorch",
+        "Computer Vision",
+        "YOLOv11",
+        "LiDAR Perception",
+        "Next.js",
+        "Three.js",
+        "GLSL Shaders",
+      ],
       sameAs: [
         "https://github.com/sam-eer12",
         "https://huggingface.co/sam-eer12",
@@ -63,7 +162,7 @@ const JSON_LD = {
       "@id": "https://huggingface.co/sam-eer12/chadGPT#software",
       name: "ChadGPT - 250M AI LLM",
       applicationCategory: "AIApplication",
-      author: { "@id": "https://sameers-portfolio-eosin.vercel.app/#person" },
+      author: { "@id": `${SITE_URL}/#person` },
       url: "https://huggingface.co/sam-eer12/chadGPT",
       description:
         "249,832,448-parameter decoder-only small language model built from scratch with GQA, RoPE, 4k Position Interpolation, and ChatML SFT.",

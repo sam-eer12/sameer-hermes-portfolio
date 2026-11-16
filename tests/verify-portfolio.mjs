@@ -46,9 +46,12 @@ test("public WebP image library and 12 preloader stickers are staged with zero l
     "src/app/page.tsx",
   ];
   for (const rel of srcFiles) {
-    const content = fs.readFileSync(path.join(ROOT, rel), "utf8");
+    const content = fs.readFileSync(path.join(ROOT, rel), "utf8").replace(/\/og-thumbnail\.jpg/g, "");
     assert.doesNotMatch(content, /\.(jpg|jpeg|png)\b/i, `${rel} must not reference jpg/png raster images`);
   }
+  const ogThumbPath = path.join(ROOT, "public", "og-thumbnail.jpg");
+  assert.ok(fs.existsSync(ogThumbPath), "public/og-thumbnail.jpg must exist for OpenGraph link previews");
+  assert.ok(fs.statSync(ogThumbPath).size > 20000, "public/og-thumbnail.jpg must not be empty");
 });
 
 test("BeFreakyPreloader implements twin-square counter and 12 WebP mouse-trail stickers", () => {
@@ -207,4 +210,7 @@ test("Next.js SSR HTML output includes preloader, portfolio markup, Three.js her
   assert.match(html, /ChadGPT - 250M AI LLM/);
   assert.match(html, /Selected Projects/);
   assert.match(html, /Engineering Stack/);
+  assert.match(html, /meta name="keywords"[^>]+Sameer Gupta/);
+  assert.match(html, /meta property="og:image"[^>]+og-thumbnail\.jpg/);
+  assert.match(html, /meta name="twitter:image"[^>]+og-thumbnail\.jpg/);
 });
