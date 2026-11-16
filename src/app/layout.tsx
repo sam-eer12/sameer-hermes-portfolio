@@ -212,14 +212,6 @@ export default function RootLayout({
           type="font/woff2"
         />
         <link rel="preload" href="/assets/cosmic-bust.webp" as="image" fetchPriority="high" />
-        <link
-          rel="preload"
-          href={`${NOUS_CDN}/assets/hermes-landing/teams/hermes-wing.svg`}
-          as="image"
-        />
-        <link rel="preload" href={`${NOUS_CDN}/assets/hermes-agent/desktop.svg`} as="image" />
-        <link rel="preload" href={`${NOUS_CDN}/assets/hermes-agent/features.svg`} as="image" />
-        <link rel="preload" href={`${NOUS_CDN}/assets/hermes-agent/globe.svg`} as="image" />
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
       <body className="min-h-screen">

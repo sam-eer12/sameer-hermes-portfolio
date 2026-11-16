@@ -289,7 +289,7 @@ function PixelOpenIcon() {
   );
 }
 
-function PromoBanner({ initialSlide }: { initialSlide: number }) {
+function PromoBanner({ initialSlide, active }: { initialSlide: number; active: boolean }) {
   const [slideIdx, setSlideIdx] = useState(initialSlide);
   const [typedCount, setTypedCount] = useState(0);
   const [hoverFast, setHoverFast] = useState(false);
@@ -301,6 +301,7 @@ function PromoBanner({ initialSlide }: { initialSlide: number }) {
   }, [initialSlide]);
 
   useEffect(() => {
+    if (!active) return;
     setTypedCount(0);
     const speed = hoverFast ? 6 : 28;
     let charTimer: number | null = null;
@@ -323,7 +324,7 @@ function PromoBanner({ initialSlide }: { initialSlide: number }) {
       if (charTimer) window.clearTimeout(charTimer);
       if (holdTimer) window.clearTimeout(holdTimer);
     };
-  }, [slide.label, slideIdx, hoverFast]);
+  }, [slide.label, slideIdx, hoverFast, active]);
 
   const prev = () => setSlideIdx((i) => (i - 1 + PROMO_SLIDES.length) % PROMO_SLIDES.length);
   const next = () => setSlideIdx((i) => (i + 1) % PROMO_SLIDES.length);
@@ -488,7 +489,7 @@ export function MarketingNavigationProvider({ children }: { children: React.Reac
             onMouseEnter={cancelTimers}
             onMouseLeave={scheduleClose}
           >
-            <PromoBanner initialSlide={initialSlide} />
+            <PromoBanner initialSlide={initialSlide} active={Boolean(openPreset)} />
             <div className="overflow-y-auto">
               {sections.map((sec) => (
                 <section

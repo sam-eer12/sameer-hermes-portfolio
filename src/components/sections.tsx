@@ -1,10 +1,15 @@
-"use client";
-
-import React, { useEffect, useId, useRef, useState } from "react";
-import { triggerPreloaderReplay } from "./befreaky-preloader";
+import React from "react";
 import { CosmicBust3D } from "./cosmic-bust-3d";
 import { FitText } from "./chrome";
-import { smoothScrollToHash } from "./navigation";
+import {
+  ContactForm,
+  ExperienceFaqAccordion,
+  FooterHashLink,
+  FooterRevealScrollSync,
+  InstallTerminal,
+  ReplayIntroButton,
+  type AccordionItemData,
+} from "./sections-client";
 import {
   GitHubPixelIcon,
   HuggingFacePixelIcon,
@@ -15,138 +20,6 @@ import {
 
 const NOUS_CDN =
   "https://web-assets.nousresearch.com/marketing/64ae3d30463049bd9e6f380cda9cd9538a0f4edb";
-
-type CliTab = "ChadGPT" | "ProjectSLM" | "Portfolio";
-
-const CLI_COMMANDS: Record<CliTab, string> = {
-  ChadGPT: "git clone https://huggingface.co/sam-eer12/chadGPT && python inference.py",
-  ProjectSLM: "git clone https://github.com/sam-eer12/projectSLM.git && cd projectSLM",
-  Portfolio: "git clone https://github.com/sam-eer12/sameer-hermes-portfolio.git",
-};
-
-function InstallTerminal() {
-  const [activeTab, setActiveTab] = useState<CliTab>("ChadGPT");
-  const [copied, setCopied] = useState(false);
-  const [liveStatus, setLiveStatus] = useState("");
-  const codeRef = useRef<HTMLElement | null>(null);
-  const labelId = useId();
-  const timerRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) window.clearTimeout(timerRef.current);
-    };
-  }, []);
-
-  const cmd = CLI_COMMANDS[activeTab];
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(cmd);
-      setCopied(true);
-      setLiveStatus("Command copied to clipboard.");
-      if (timerRef.current) window.clearTimeout(timerRef.current);
-      timerRef.current = window.setTimeout(() => setCopied(false), 2000);
-    } catch {
-      if (codeRef.current && window.getSelection) {
-        const range = document.createRange();
-        range.selectNodeContents(codeRef.current);
-        const sel = window.getSelection();
-        sel?.removeAllRanges();
-        sel?.addRange(range);
-      }
-      setLiveStatus("Clipboard blocked; command selected for manual copy.");
-    }
-  };
-
-  const tabs: CliTab[] = ["ChadGPT", "ProjectSLM", "Portfolio"];
-
-  return (
-    <div className="hw-install-terminal" id="install">
-      <p className="hw-install-terminal-label" id={labelId}>
-        Run ChadGPT or inspect source locally
-      </p>
-      <div dir="ltr" data-orientation="horizontal" className="hw-install-terminal-body">
-        <div
-          role="tablist"
-          aria-orientation="horizontal"
-          aria-labelledby={labelId}
-          className="hw-install-terminal-tabs"
-        >
-          {tabs.map((tab, idx) => {
-            const isSelected = activeTab === tab;
-            return (
-              <button
-                key={tab}
-                type="button"
-                role="tab"
-                aria-selected={isSelected}
-                data-state={isSelected ? "active" : "inactive"}
-                className="hw-install-terminal-tab"
-                tabIndex={isSelected ? 0 : -1}
-                onClick={() => setActiveTab(tab)}
-                onKeyDown={(e) => {
-                  if (e.key === "ArrowRight") {
-                    e.preventDefault();
-                    setActiveTab(tabs[(idx + 1) % tabs.length]);
-                  } else if (e.key === "ArrowLeft") {
-                    e.preventDefault();
-                    setActiveTab(tabs[(idx - 1 + tabs.length) % tabs.length]);
-                  } else if (e.key === "Home") {
-                    e.preventDefault();
-                    setActiveTab(tabs[0]);
-                  } else if (e.key === "End") {
-                    e.preventDefault();
-                    setActiveTab(tabs[tabs.length - 1]);
-                  }
-                }}
-              >
-                {tab}
-              </button>
-            );
-          })}
-        </div>
-        <div
-          data-state="active"
-          role="tabpanel"
-          tabIndex={0}
-          className="hw-install-terminal-panel"
-        >
-          <code ref={codeRef}>{cmd}</code>
-          <button
-            aria-label={copied ? "Copied install command" : "Copy install command"}
-            className="hw-install-terminal-copy"
-            type="button"
-            onClick={handleCopy}
-          >
-            {copied ? (
-              <svg
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-                className="block shrink-0 size-4"
-              >
-                <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" />
-              </svg>
-            ) : (
-              <svg
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-                className="block shrink-0 size-4"
-              >
-                <path d="M6 6h16v2H6zM2 2h16v2H2zm4 6h2v12H6zM2 4h2v12H2zm4 16h16v2H6zM20 8h2v12h-2zm-4-4h2v2h-2zM2 16h4v2H2z" />
-              </svg>
-            )}
-          </button>
-        </div>
-      </div>
-      <span aria-live="polite" className="sr-only">
-        {liveStatus}
-      </span>
-    </div>
-  );
-}
 
 export function HeroSection() {
   return (
@@ -219,18 +92,7 @@ export function HeroSection() {
               <span aria-hidden="true" className="hermes-button-hover-border" />
             </a>
 
-            <button
-              type="button"
-              onClick={triggerPreloaderReplay}
-              data-slot="button"
-              data-variant="ghost"
-              data-size="m"
-              className="hermes-button group relative inline-flex cursor-pointer items-center justify-center rounded-none border border-white/25 bg-transparent outline-none select-none tracking-[0.02em] transition-[background-color,box-shadow,color,transform] duration-150 ease-out hover:duration-0 active:scale-[0.98] hermes-button-size-m text-[var(--hermes-white)]/85 hover:text-[var(--hermes-white)] hover:bg-white/10 gap-2 px-3 py-2.5"
-            >
-              <span className="leading-none whitespace-nowrap text-cap-trim">
-                Replay Intro
-              </span>
-            </button>
+            <ReplayIntroButton />
           </div>
 
           <InstallTerminal />
@@ -656,12 +518,6 @@ export function ProjectsSection() {
   );
 }
 
-interface AccordionItemData {
-  id: string;
-  question: string;
-  answer: string;
-}
-
 const EXPERIENCE_ITEMS: AccordionItemData[] = [
   {
     id: "edu",
@@ -696,23 +552,6 @@ const EXPERIENCE_ITEMS: AccordionItemData[] = [
 ];
 
 export function ExperienceFaqSection() {
-  const [openId, setOpenId] = useState<string | null>("edu");
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const baseHeightRef = useRef<number>(0);
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(() => {
-      if (el.offsetHeight > baseHeightRef.current) {
-        baseHeightRef.current = el.offsetHeight;
-        el.style.minHeight = `${baseHeightRef.current}px`;
-      }
-    });
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-
   return (
     <section className="bg-hermes-paper py-[60px]" id="faqs">
       <div className="mx-auto w-full max-w-[calc(var(--hw-teams-col)+2*var(--hw-teams-pad-x))] px-[var(--hw-teams-pad-x)] flex flex-col gap-5">
@@ -762,91 +601,7 @@ export function ExperienceFaqSection() {
           </div>
         </div>
 
-        <div ref={containerRef}>
-          {EXPERIENCE_ITEMS.map((item, idx) => {
-            const isOpen = openId === item.id;
-            return (
-              <div
-                key={item.id}
-                data-state={isOpen ? "open" : "closed"}
-                className="border border-transparent transition-colors duration-150 hover:duration-0 relative border-dotted border-t-[var(--hermes-primary)] px-0 py-5"
-                data-surface="white"
-              >
-                <h3 className="flex">
-                  <button
-                    type="button"
-                    aria-expanded={isOpen}
-                    data-state={isOpen ? "open" : "closed"}
-                    className="group flex min-h-[38px] flex-1 cursor-pointer items-center gap-2 text-left text-[var(--hermes-primary)] focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-current"
-                    onClick={() => setOpenId(isOpen ? null : item.id)}
-                    onKeyDown={(e) => {
-                      const btns = e.currentTarget
-                        .closest("#faqs")
-                        ?.querySelectorAll<HTMLButtonElement>("h3 button");
-                      if (!btns) return;
-                      if (e.key === "ArrowDown") {
-                        e.preventDefault();
-                        btns[(idx + 1) % btns.length]?.focus();
-                      } else if (e.key === "ArrowUp") {
-                        e.preventDefault();
-                        btns[(idx - 1 + btns.length) % btns.length]?.focus();
-                      } else if (e.key === "Home") {
-                        e.preventDefault();
-                        btns[0]?.focus();
-                      } else if (e.key === "End") {
-                        e.preventDefault();
-                        btns[btns.length - 1]?.focus();
-                      }
-                    }}
-                  >
-                    <span className="min-w-0 flex-1 font-[family-name:var(--font-display)] text-[length:var(--hw-teams-faq-q)] leading-[1.4] font-normal normal-case underline decoration-from-font underline-offset-[var(--hw-underline-offset)]">
-                      {item.question}
-                    </span>
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      aria-hidden="true"
-                      className={`size-3.5 shrink-0 ${isOpen ? "hidden" : "block"}`}
-                    >
-                      <path d="M13 11h7v2h-7v7h-2v-7H4v-2h7V4h2v7Z" />
-                    </svg>
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      aria-hidden="true"
-                      className={`size-3.5 shrink-0 ${isOpen ? "block" : "hidden"}`}
-                    >
-                      <path d="M4 11h16v2H4z" />
-                    </svg>
-                  </button>
-                </h3>
-                <div
-                  role="region"
-                  data-state={isOpen ? "open" : "closed"}
-                  data-faq-answer=""
-                  aria-hidden={!isOpen}
-                  inert={!isOpen ? true : undefined}
-                  style={
-                    isOpen
-                      ? undefined
-                      : {
-                          position: "absolute",
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          visibility: "hidden",
-                          pointerEvents: "none",
-                        }
-                  }
-                >
-                  <div className="pt-[var(--space-m)] normal-case max-w-[880px] text-[length:var(--hw-teams-body)] leading-[1.5] text-[var(--hw-teams-ink)]">
-                    {item.answer}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        <ExperienceFaqAccordion items={EXPERIENCE_ITEMS} />
       </div>
     </section>
   );
@@ -1090,39 +845,6 @@ export function SkillsPortalSection() {
 }
 
 export function ContactSection() {
-  const [result, setResult] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    setSubmitting(true);
-    setResult("Sending....");
-
-    try {
-      const formData = new FormData(form);
-      formData.append("access_key", "dbb12da2-22b7-4553-839a-efb2b312f97e");
-
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = (await response.json()) as { success?: boolean; message?: string };
-
-      if (data.success) {
-        setResult("Form Submitted Successfully");
-        form.reset();
-      } else {
-        setResult(data.message || "Submission failed. Please try again.");
-      }
-    } catch {
-      setResult("Network error. Please email sameer870732@gmail.com directly.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   return (
     <section
       id="contact"
@@ -1173,7 +895,10 @@ export function ContactSection() {
           </a>
         </div>
 
-        <form onSubmit={onSubmit} className="hw-contact-card">
+        <ContactForm
+          endpoint="https://api.web3forms.com/submit"
+          accessKey="dbb12da2-22b7-4553-839a-efb2b312f97e"
+        >
           <div className="hw-contact-grid">
             <label className="hw-contact-field">
               <span className="text-xs font-medium opacity-80">
@@ -1213,32 +938,7 @@ export function ContactSection() {
               className="hw-contact-input resize-y"
             />
           </label>
-
-          <div className="flex flex-wrap items-center gap-5" style={{ marginTop: "24px" }}>
-            <button
-              type="submit"
-              disabled={submitting}
-              data-slot="button"
-              data-variant="primary"
-              data-size="m"
-              className="hw-contact-submit hermes-button group relative inline-flex cursor-pointer items-center justify-center rounded-none border-0 outline-none select-none font-[family-name:var(--font-mono)] tracking-[0.1em] uppercase text-[length:var(--hw-teams-label)]"
-            >
-              <span className="leading-none whitespace-nowrap cap-mono text-cap-trim">
-                {submitting ? "Sending...." : "Send Message"}
-              </span>
-            </button>
-
-            {result ? (
-              <p
-                role="status"
-                aria-live="polite"
-                className="text-xs font-medium text-[var(--hermes-primary)]"
-              >
-                {result}
-              </p>
-            ) : null}
-          </div>
-        </form>
+        </ContactForm>
       </div>
     </section>
   );
@@ -1358,47 +1058,8 @@ const FOOTER_COLUMNS: FooterNavColumn[] = [
 ];
 
 export function MarketingFooterReveal() {
-  const revealRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const el = revealRef.current;
-    if (!el) return;
-    let rafPending = false;
-
-    const updateReveal = () => {
-      rafPending = false;
-      const vh = window.innerHeight || 800;
-      const maxScroll = Math.max(1, document.documentElement.scrollHeight - vh);
-      const distFromBottom = maxScroll - window.scrollY;
-      const bottomProgress = Math.max(0, Math.min(1, 1 - distFromBottom / Math.max(1, vh)));
-      const mainEl = document.getElementById("hpv2-main");
-      const mainProgress = mainEl
-        ? Math.max(0, Math.min(1, 1 - mainEl.getBoundingClientRect().bottom / Math.max(1, vh)))
-        : bottomProgress;
-      const progress = distFromBottom <= 16 ? 1 : Math.max(mainProgress, bottomProgress);
-      el.style.setProperty("--hw-footer-opacity", "1");
-      el.style.setProperty("--hw-footer-lift", `${((1 - progress) * 16).toFixed(1)}px`);
-    };
-
-    const onScroll = () => {
-      if (!rafPending) {
-        rafPending = true;
-        window.requestAnimationFrame(updateReveal);
-      }
-    };
-
-    updateReveal();
-    document.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-    return () => {
-      document.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
-
   return (
     <div
-      ref={revealRef}
       id="footer"
       className="hw-footer-reveal relative z-0 md:-mt-[100dvh]"
       style={
@@ -1408,6 +1069,7 @@ export function MarketingFooterReveal() {
         } as React.CSSProperties
       }
     >
+      <FooterRevealScrollSync />
       <footer className="hw-footer-soften bg-hermes text-[var(--hw-fg)] md:sticky md:top-0 md:flex md:min-h-dvh md:translate-y-[var(--hw-footer-lift,0px)] md:flex-col md:pb-[var(--hw-frame)] md:motion-reduce:translate-y-0">
         <div className="hw-footer-art-stage bg-inherit">
           <div className="hw-noise absolute inset-0">
@@ -1453,31 +1115,41 @@ export function MarketingFooterReveal() {
                 <ul className="-my-[var(--hw-teams-footer-row-pad)] flex flex-col">
                   {col.items.map((item) => {
                     const isHash = item.href.startsWith("#");
+                    const linkContent = (
+                      <span
+                        data-chip=""
+                        data-tone="plain"
+                        className="inline-flex h-[var(--hpv2-chip-h)] shrink-0 items-center gap-1.5 rounded-r-xs px-1.5 whitespace-nowrap disabled:pointer-events-none disabled:opacity-50 transition-colors duration-150 ease-out group-hover:bg-[var(--hw-fg)] group-hover:text-[var(--hermes-primary)] group-hover:duration-0"
+                      >
+                        {item.prefix ? (
+                          <span>
+                            <span className="opacity-60">{item.prefix}</span>
+                            {item.label}
+                          </span>
+                        ) : (
+                          item.label
+                        )}
+                      </span>
+                    );
+                    const linkClass =
+                      "group -ml-1 inline-flex self-start py-[var(--hw-teams-footer-row-pad)] whitespace-nowrap";
                     return (
                       <li key={`${col.title}-${item.label}`} className="flex">
-                        <a
-                          href={item.href}
-                          target={item.external ? "_blank" : undefined}
-                          rel={item.external ? "noopener noreferrer" : undefined}
-                          download={item.download}
-                          onClick={isHash ? (e) => smoothScrollToHash(item.href, e) : undefined}
-                          className="group -ml-1 inline-flex self-start py-[var(--hw-teams-footer-row-pad)] whitespace-nowrap"
-                        >
-                          <span
-                            data-chip=""
-                            data-tone="plain"
-                            className="inline-flex h-[var(--hpv2-chip-h)] shrink-0 items-center gap-1.5 rounded-r-xs px-1.5 whitespace-nowrap disabled:pointer-events-none disabled:opacity-50 transition-colors duration-150 ease-out group-hover:bg-[var(--hw-fg)] group-hover:text-[var(--hermes-primary)] group-hover:duration-0"
+                        {isHash ? (
+                          <FooterHashLink href={item.href} className={linkClass}>
+                            {linkContent}
+                          </FooterHashLink>
+                        ) : (
+                          <a
+                            href={item.href}
+                            target={item.external ? "_blank" : undefined}
+                            rel={item.external ? "noopener noreferrer" : undefined}
+                            download={item.download}
+                            className={linkClass}
                           >
-                            {item.prefix ? (
-                              <span>
-                                <span className="opacity-60">{item.prefix}</span>
-                                {item.label}
-                              </span>
-                            ) : (
-                              item.label
-                            )}
-                          </span>
-                        </a>
+                            {linkContent}
+                          </a>
+                        )}
                       </li>
                     );
                   })}

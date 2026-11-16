@@ -58,15 +58,7 @@ const BUST_VERTEX_SHADER = /* glsl */ `
     return 0.60 - 0.11 * (xUv - 0.5);
   }
 
-  float computeBustHeight(vec2 uv) {
-    vec2 texel = vec2(1.0 / 512.0, 1.0 / 320.0);
-    float c = lum(texture2D(uTexture, uv).rgb);
-    float l = lum(texture2D(uTexture, uv - vec2(texel.x * 2.0, 0.0)).rgb);
-    float r = lum(texture2D(uTexture, uv + vec2(texel.x * 2.0, 0.0)).rgb);
-    float u = lum(texture2D(uTexture, uv + vec2(0.0, texel.y * 2.0)).rgb);
-    float d = lum(texture2D(uTexture, uv - vec2(0.0, texel.y * 2.0)).rgb);
-    float smoothLum = (c * 2.0 + l + r + u + d) / 6.0;
-
+  float computeBustOffset(vec2 uv) {
     // Anatomical 3D bust volume approximation:
     // Center face ellipsoid + recessed mouth cavity + neck/shoulder foreground projection
     vec2 headCenter = vec2(0.51, 0.62);
@@ -81,19 +73,28 @@ const BUST_VERTEX_SHADER = /* glsl */ `
     // Foreground left-shoulder toga projection
     float shoulder = smoothstep(0.45, 0.0, length((uv - vec2(0.18, 0.12)) * vec2(0.95, 1.25))) * 0.34;
 
-    return smoothLum * 0.68 + headSphere + shoulder - mouthCavity;
+    return headSphere + shoulder - mouthCavity;
   }
 
   void main() {
     vUv = uv;
 
-    float h = computeBustHeight(uv);
+    vec2 texel = vec2(1.0 / 512.0, 1.0 / 320.0);
+    vec2 stepX = vec2(texel.x * 2.0, 0.0);
+    vec2 stepY = vec2(0.0, texel.y * 2.0);
+    float c = lum(texture2D(uTexture, uv).rgb);
+    float l = lum(texture2D(uTexture, uv - stepX).rgb);
+    float r = lum(texture2D(uTexture, uv + stepX).rgb);
+    float u = lum(texture2D(uTexture, uv + stepY).rgb);
+    float d = lum(texture2D(uTexture, uv - stepY).rgb);
+    float smoothLum = (c * 2.0 + l + r + u + d) / 6.0;
+
+    float h = smoothLum * 0.68 + computeBustOffset(uv);
     float edgeMaskX = smoothstep(0.0, 0.09, uv.x) * smoothstep(1.0, 0.91, uv.x);
     float edgeMaskY = smoothstep(0.0, 0.08, uv.y) * smoothstep(1.0, 0.92, uv.y);
 
     // Preserve solid sculpture silhouette (including shadowed neck, cheek, and open mouth cavity)
-    vec3 rawTex = texture2D(uTexture, uv).rgb;
-    float baseLum = lum(rawTex);
+    float baseLum = c;
     float coreSilhouette = smoothstep(0.68, 0.24, length((uv - vec2(0.45, 0.42)) * vec2(0.92, 0.96)));
     float bustPresence = smoothstep(0.02, 0.14, baseLum + coreSilhouette * 0.42);
     vAlphaMask = clamp(bustPresence * edgeMaskX * edgeMaskY, 0.0, 1.0);
@@ -127,8 +128,8 @@ const BUST_VERTEX_SHADER = /* glsl */ `
     pos.z += exp(-length(uv - (uPointer * 0.5 + 0.5)) * 4.5) * 0.06;
 
     // Approximate surface normal for vertex/fragment shading
-    float hx = computeBustHeight(uv + vec2(0.004, 0.0));
-    float hy = computeBustHeight(uv + vec2(0.0, 0.004));
+    float hx = r * 0.68 + computeBustOffset(uv + stepX);
+    float hy = u * 0.68 + computeBustOffset(uv + stepY);
     vNormalApprox = normalize(vec3((h - hx) * 6.5 * uDepth, (h - hy) * 6.5 * uDepth, 1.0));
 
     gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);

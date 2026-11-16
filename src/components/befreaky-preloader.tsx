@@ -35,10 +35,10 @@ export function BeFreakyPreloader() {
   const [phase, setPhase] = useState<LoaderPhase>("loading");
   const [stepIdx, setStepIdx] = useState<number>(0);
   const [holdMode, setHoldMode] = useState<boolean>(false);
-  const [spawnCount, setSpawnCount] = useState<number>(0);
   const [runKey, setRunKey] = useState<number>(0);
 
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const spawnCountRef = useRef<number>(0);
   const stickerRefs = useRef<(HTMLDivElement | null)[]>([]);
   const poolIndexRef = useRef<number>(0);
   const zIndexRef = useRef<number>(10);
@@ -70,7 +70,8 @@ export function BeFreakyPreloader() {
 
     zIndexRef.current += 1;
     el.style.zIndex = String(zIndexRef.current);
-    setSpawnCount((c) => c + 1);
+    spawnCountRef.current += 1;
+    rootRef.current?.setAttribute("data-spawn-count", String(spawnCountRef.current));
 
     const clampTilt = Math.max(-14, Math.min(14, dx * 0.22));
     const driftX = Math.max(-42, Math.min(42, dx * 0.42));
@@ -132,6 +133,8 @@ export function BeFreakyPreloader() {
     const onReplay = () => {
       lastSpawnRef.current = null;
       poolIndexRef.current = 0;
+      spawnCountRef.current = 0;
+      rootRef.current?.setAttribute("data-spawn-count", "0");
       setStepIdx(0);
       setHoldMode(false);
       setPhase("loading");
@@ -205,9 +208,13 @@ export function BeFreakyPreloader() {
       spawnStickerAt(e.clientX, e.clientY);
     };
 
-    window.addEventListener("pointermove", handlePointerMove, { passive: true });
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    window.addEventListener("pointerdown", handlePointerDown, { passive: true });
+    const supportsPointer = "PointerEvent" in window;
+    if (supportsPointer) {
+      window.addEventListener("pointermove", handlePointerMove, { passive: true });
+      window.addEventListener("pointerdown", handlePointerDown, { passive: true });
+    } else {
+      window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    }
 
     return () => {
       window.removeEventListener("pointermove", handlePointerMove);
@@ -226,7 +233,7 @@ export function BeFreakyPreloader() {
       data-testid="befreaky-preloader"
       data-phase={phase}
       data-step={stepIdx}
-      data-spawn-count={spawnCount}
+      data-spawn-count={0}
       aria-label="Portfolio Preloader"
       role="status"
       className={`preloader ${phase === "exiting" ? "preloader--exiting" : ""}`}
@@ -260,6 +267,7 @@ export function BeFreakyPreloader() {
               alt=""
               decoding="async"
               loading="eager"
+              fetchPriority={idx < 2 ? "auto" : "low"}
               className="preloader__stickers__inner"
               draggable={false}
             />

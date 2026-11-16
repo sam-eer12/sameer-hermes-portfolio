@@ -196,7 +196,11 @@ export function MarketingFrame() {
     const frameEl = frameRef.current;
     if (!frameEl) return;
 
+    let lastIdleReset = 0;
     const resetIdle = () => {
+      const now = performance.now();
+      if (lastIdleReset !== 0 && now - lastIdleReset < 500) return;
+      lastIdleReset = now;
       frameEl.dataset.idle = "false";
       if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
       idleTimerRef.current = window.setTimeout(() => {
@@ -206,10 +210,14 @@ export function MarketingFrame() {
 
     resetIdle();
 
+    let maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    const updateMetrics = () => {
+      maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    };
+
     let rafPending = false;
     const syncScroll = () => {
       rafPending = false;
-      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
       const pct = Math.min(1, Math.max(0, window.scrollY / maxScroll));
       const scrollPos = 10 + pct * 80;
       frameEl.style.setProperty("--scroll-y", `${scrollPos.toFixed(2)}%`);
@@ -221,6 +229,11 @@ export function MarketingFrame() {
         rafPending = true;
         window.requestAnimationFrame(syncScroll);
       }
+    };
+
+    const onResize = () => {
+      updateMetrics();
+      scheduleSync();
     };
 
     const onDocClick = (e: MouseEvent) => {
@@ -255,7 +268,7 @@ export function MarketingFrame() {
 
     syncScroll();
     document.addEventListener("scroll", scheduleSync, { passive: true });
-    window.addEventListener("resize", scheduleSync, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
     document.addEventListener("pointermove", resetIdle, { passive: true });
     document.addEventListener("click", onDocClick, { passive: true });
 
@@ -263,7 +276,7 @@ export function MarketingFrame() {
       if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
       if (cueTimerRef.current) window.clearTimeout(cueTimerRef.current);
       document.removeEventListener("scroll", scheduleSync);
-      window.removeEventListener("resize", scheduleSync);
+      window.removeEventListener("resize", onResize);
       document.removeEventListener("pointermove", resetIdle);
       document.removeEventListener("click", onDocClick);
     };
@@ -484,10 +497,7 @@ export function HeroParallax() {
       const vh = window.innerHeight || 800;
       const pyHero = Math.min(vh, Math.max(0, 0.35 * sy));
 
-      for (let i = 0; i < heroTargets.length; i++) {
-        heroTargets[i].style.setProperty("--py-hero", `${pyHero.toFixed(1)}px`);
-      }
-
+      const imgWrites: Array<{ el: HTMLElement; py: number }> = [];
       for (let i = 0; i < imgTargets.length; i++) {
         const el = imgTargets[i];
         const rect = el.getBoundingClientRect();
@@ -495,7 +505,15 @@ export function HeroParallax() {
         const center = rect.top + rect.height / 2;
         const ratio = (center - vh / 2) / Math.max(1, vh);
         const py = -ratio * rect.height * 0.1;
-        el.style.setProperty("--py-img", `${py.toFixed(1)}px`);
+        imgWrites.push({ el, py });
+      }
+
+      const heroVal = `${pyHero.toFixed(1)}px`;
+      for (let i = 0; i < heroTargets.length; i++) {
+        heroTargets[i].style.setProperty("--py-hero", heroVal);
+      }
+      for (let i = 0; i < imgWrites.length; i++) {
+        imgWrites[i].el.style.setProperty("--py-img", `${imgWrites[i].py.toFixed(1)}px`);
       }
     };
 
