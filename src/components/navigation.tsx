@@ -761,7 +761,7 @@ export function MarketingHeader() {
               className="hermes-button group relative inline-flex cursor-pointer items-center justify-center rounded-none border-0 bg-clip-padding outline-none select-none font-[family-name:var(--font-mono)] tracking-[0.1em] uppercase transition-[background-color,box-shadow,color,transform] duration-150 ease-out hover:duration-0 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-midground/30 hermes-button-size-m bg-[color-mix(in_srgb,var(--hermes-paper)_90%,transparent)] text-[var(--hpv2-brand,var(--hermes-primary))] hover:bg-[var(--hermes-paper)] hover:shadow-[var(--hpv2-shadow-lift)] active:bg-[var(--hermes-paper)] gap-2 px-3 py-[var(--hw-teams-btn-py)] text-[length:var(--hw-teams-label)]"
             >
               <span className="leading-none whitespace-nowrap cap-mono text-cap-trim">
-                3D Studio
+                Profiles
               </span>
               <span aria-hidden="true" className="hermes-button-hover-border" />
             </a>
