@@ -178,6 +178,8 @@ test("Resume PDF, favicon.svg, Contact form, and download links are wired correc
   assert.match(secSrc, /name="email"/);
   assert.match(secSrc, /name="message"/);
   assert.match(secSrc, /id="footer"/);
+  assert.equal((secSrc.match(/<CosmicBust3D/g) || []).length, 1, "Only hero CosmicBust3D section should render");
+  assert.ok(!secSrc.includes("cosmic-studio-panel"), "Secondary 3D studio frame must be removed");
 });
 
 test("Navbar dropdown links render full-width Hermes grid slots nw-subnav-label and nw-subnav-description", () => {

@@ -59,9 +59,9 @@ const PRESET_SECTIONS: Record<NavPreset, SubnavSection[]> = {
       heading: "Profile",
       links: [
         {
-          label: "Overview & 3D Studio",
+          label: "Open Weights & Code",
           href: "#downloads",
-          description: "Interactive Three.js sculpture and shader controls",
+          description: "Hugging Face ChadGPT weights, GitHub repos, and site links",
         },
         {
           label: "Education & Experience",

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useId, useRef, useState } from "react";
 import { triggerPreloaderReplay } from "./befreaky-preloader";
-import { CosmicBust3D, CosmicBustParams, CosmicShaderMode } from "./cosmic-bust-3d";
+import { CosmicBust3D } from "./cosmic-bust-3d";
 import { FitText } from "./chrome";
 import { smoothScrollToHash } from "./navigation";
 import {
@@ -245,101 +245,12 @@ export function HeroSection() {
 }
 
 export function ShowcaseSection() {
-  const [studioMode, setStudioMode] = useState<CosmicShaderMode>("cosmic");
-  const [params, setParams] = useState<CosmicBustParams>({
-    glitchIntensity: 0.78,
-    orbitSpeed: 1.0,
-    reliefDepth: 0.64,
-    kintsugiGlow: 0.85,
-  });
-  const [surgeCount, setSurgeCount] = useState(0);
-
   return (
-    <section aria-label="Interactive 3D Studio & Ecosystem" className="landing-downloads" id="downloads">
+    <section aria-label="Open Weights and Repositories" className="landing-downloads" id="downloads">
       <div className="mx-auto w-full max-w-[calc(var(--hw-teams-col)+2*var(--hw-teams-pad-x))] px-[var(--hw-teams-pad-x)]">
-        <figure
-          aria-label="Interactive Three.js Cosmic Bust Shader Studio"
-          className="landing-desktop-preview cosmic-studio-panel"
-        >
-          <CosmicBust3D
-            variant="studio"
-            mode={studioMode}
-            onModeChange={setStudioMode}
-            params={params}
-            surgeCount={surgeCount}
-          />
-          <div className="cosmic-studio-controls">
-            <label className="flex flex-col gap-1.5">
-              <span>Glitch Slice ({params.glitchIntensity.toFixed(2)})</span>
-              <input
-                type="range"
-                min="0"
-                max="1.5"
-                step="0.05"
-                value={params.glitchIntensity}
-                onChange={(e) =>
-                  setParams((p) => ({ ...p, glitchIntensity: parseFloat(e.target.value) }))
-                }
-                className="cosmic-studio-slider"
-              />
-            </label>
-            <label className="flex flex-col gap-1.5">
-              <span>Orbit Speed ({params.orbitSpeed.toFixed(2)}x)</span>
-              <input
-                type="range"
-                min="0.1"
-                max="3.0"
-                step="0.1"
-                value={params.orbitSpeed}
-                onChange={(e) =>
-                  setParams((p) => ({ ...p, orbitSpeed: parseFloat(e.target.value) }))
-                }
-                className="cosmic-studio-slider"
-              />
-            </label>
-            <label className="flex flex-col gap-1.5">
-              <span>3D Depth ({params.reliefDepth.toFixed(2)})</span>
-              <input
-                type="range"
-                min="0.1"
-                max="1.2"
-                step="0.05"
-                value={params.reliefDepth}
-                onChange={(e) =>
-                  setParams((p) => ({ ...p, reliefDepth: parseFloat(e.target.value) }))
-                }
-                className="cosmic-studio-slider"
-              />
-            </label>
-            <div className="flex flex-col justify-between gap-1.5">
-              <span>Kintsugi Gold ({params.kintsugiGlow.toFixed(2)})</span>
-              <div className="flex items-center gap-2">
-                <input
-                  type="range"
-                  min="0"
-                  max="1.6"
-                  step="0.05"
-                  value={params.kintsugiGlow}
-                  onChange={(e) =>
-                    setParams((p) => ({ ...p, kintsugiGlow: parseFloat(e.target.value) }))
-                  }
-                  className="cosmic-studio-slider flex-1"
-                />
-                <button
-                  type="button"
-                  onClick={() => setSurgeCount((c) => c + 1)}
-                  className="cosmic-bust-surge-btn shrink-0"
-                >
-                  Pulse
-                </button>
-              </div>
-            </div>
-          </div>
-        </figure>
-
         <div className="landing-download-title">
           <img alt="" height={24} width={24} src={`${NOUS_CDN}/assets/hermes-agent/desktop.svg`} />
-          <div className="flex w-full items-start gap-2.5 landing-section-title landing-download-heading">
+          <div className="flex w-full flex-wrap items-start gap-2.5 landing-section-title landing-download-heading">
             <h2
               data-type-role="heading"
               className="text-cap-trim cap-rules text-[var(--hw-teams-ink)]"
@@ -352,7 +263,7 @@ export function ShowcaseSection() {
                 textTransform: "none",
               }}
             >
-              Shader Studio &amp; Open Weights
+              Open Weights &amp; Code
             </h2>
           </div>
           <p
@@ -365,8 +276,8 @@ export function ShowcaseSection() {
               lineHeight: 1.6,
             }}
           >
-            Switch GLSL render modes on the bust above, inspect ChadGPT weights on Hugging Face, or
-            browse source code on GitHub.
+            Inspect ChadGPT 250M model weights on Hugging Face, browse source repositories on GitHub,
+            or view the earlier portfolio build.
           </p>
         </div>
 
@@ -805,10 +716,10 @@ export function ExperienceFaqSection() {
   return (
     <section className="bg-hermes-paper py-[60px]" id="faqs">
       <div className="mx-auto w-full max-w-[calc(var(--hw-teams-col)+2*var(--hw-teams-pad-x))] px-[var(--hw-teams-pad-x)] flex flex-col gap-5">
-        <div className="flex w-full items-start gap-2.5">
+        <div className="flex w-full flex-wrap items-start gap-2.5 hw-faq-header">
           <h2
             data-type-role="heading"
-            className="text-cap-trim cap-rules text-[var(--hw-teams-ink)]"
+            className="text-cap-trim cap-rules text-[var(--hw-teams-ink)] min-w-0 max-w-full"
             style={{
               fontFamily: "var(--font-rules-gothic-cnd)",
               fontSize: "var(--hpv2-type-heading)",
@@ -833,7 +744,7 @@ export function ExperienceFaqSection() {
               </svg>
             </a>
           </span>
-          <div className="ml-auto shrink-0 self-start text-[var(--hw-teams-ink)]">
+          <div className="ml-auto shrink-0 self-start text-[var(--hw-teams-ink)] hw-faq-header-cta">
             <a
               href="/assets/Sameer_Gupta_Resume.pdf"
               download="Sameer_Gupta_Resume.pdf"
@@ -1426,7 +1337,7 @@ const FOOTER_COLUMNS: FooterNavColumn[] = [
     items: [
       { label: "ChadGPT 250M", href: "https://huggingface.co/sam-eer12/chadGPT", external: true },
       { label: "Project SLM", href: "https://github.com/sam-eer12/projectSLM", external: true },
-      { label: "Shader Studio", href: "#downloads" },
+      { label: "Open Weights & Code", href: "#downloads" },
       { label: "Engineering Stack", href: "#portal" },
       { label: "Experience", href: "#faqs" },
       { label: "Contact", href: "#contact" },

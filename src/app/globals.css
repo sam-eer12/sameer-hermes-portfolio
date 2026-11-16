@@ -47,18 +47,6 @@ html {
   }
 }
 
-.cosmic-bust-stage--studio {
-  min-height: 520px;
-  aspect-ratio: 1080 / 632;
-}
-
-@media (max-width: 767px) {
-  .cosmic-bust-stage--studio {
-    min-height: 360px;
-    aspect-ratio: 4 / 3.8;
-  }
-}
-
 .cosmic-bust-canvas {
   display: block;
   width: 100%;
@@ -163,36 +151,47 @@ html {
   transform: scale(0.97);
 }
 
-.cosmic-studio-panel {
-  border: 1px solid rgba(242, 242, 242, 0.24);
-  background: color-mix(in srgb, var(--hermes-primary, #0000f2) 86%, #050516);
+/* Prevent section titles and hero headings from overflowing smaller screens */
+.hermes-web {
+  --hpv2-type-heading: clamp(3.25rem, 5.5vw, 80px);
 }
 
-.cosmic-studio-controls {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
-  padding: 14px 16px;
-  border-top: 1px solid rgba(242, 242, 242, 0.18);
-  font-family: var(--font-body), sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-  text-transform: none;
-  letter-spacing: 0;
-  color: var(--hermes-white, #f2f2f2);
+[data-type-role="heading"],
+[data-type-role="hero"],
+.landing-section-title > h2,
+.landing-feature-heading > h3 {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: break-word;
 }
 
-@media (max-width: 900px) {
-  .cosmic-studio-controls {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+.landing-section-title {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1024px) {
+  .hermes-web {
+    --hpv2-type-heading: clamp(2.5rem, 6vw, 56px);
+    --hw-teams-hero-display: clamp(2.75rem, 6.2vw, 72px);
   }
 }
 
-.cosmic-studio-slider {
-  width: 100%;
-  accent-color: #f878cf;
-  cursor: pointer;
+@media (max-width: 767px) {
+  .hermes-web {
+    --hpv2-type-heading: clamp(1.85rem, 8.2vw, 44px);
+    --hw-teams-hero-display: clamp(2.25rem, 11vw, 4.25rem) !important;
+    --hw-teams-feature-title: clamp(1.65rem, 7vw, 2.75rem) !important;
+  }
+
+  .hw-faq-header {
+    flex-wrap: wrap;
+    row-gap: 12px;
+  }
+
+  .hw-faq-header-cta {
+    width: 100%;
+    margin-left: 0 !important;
+  }
 }
 
 /* Ensure landing-hero-art hosts the interactive 3D canvas cleanly without img-only constraint clipping */
