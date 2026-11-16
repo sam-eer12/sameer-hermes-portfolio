@@ -344,7 +344,6 @@ export function CosmicBust3D({
   };
 
   const [localSurge, setLocalSurge] = useState(0);
-  const [pointerLabel, setPointerLabel] = useState("DRAG TO ORBIT · CLICK TO SURGE");
   const [webglReady, setWebglReady] = useState(true);
 
   const stateRef = useRef({
@@ -613,7 +612,6 @@ export function CosmicBust3D({
       dragBaseYaw = targetYaw;
       dragBasePitch = targetPitch;
       canvas.setPointerCapture(e.pointerId);
-      setPointerLabel("ORBITING 3D MESH");
     };
 
     const handlePointerMove = (e: PointerEvent) => {
@@ -642,7 +640,6 @@ export function CosmicBust3D({
       } catch {
         // Ignore if pointer already released
       }
-      setPointerLabel("DRAG TO ORBIT · CLICK TO SURGE");
     };
 
     const handlePointerLeave = () => {
@@ -826,27 +823,29 @@ export function CosmicBust3D({
         />
       )}
 
-      <div className="cosmic-bust-hud-top">
-        <span>THREE.JS // GLSL COSMIC BUST v1.0</span>
-        <span className="max-sm:hidden">{pointerLabel}</span>
-      </div>
-
       <div className="cosmic-bust-hud-bottom">
         <div className="cosmic-bust-tabs" role="group" aria-label="3D Shader Render Modes">
-          {(["cosmic", "halftone", "kintsugi", "wireframe"] as CosmicShaderMode[]).map((m) => (
+          {(
+            [
+              { id: "cosmic", label: "Cosmic" },
+              { id: "halftone", label: "Halftone" },
+              { id: "kintsugi", label: "Kintsugi" },
+              { id: "wireframe", label: "Wireframe" },
+            ] as const
+          ).map(({ id, label }) => (
             <button
-              key={m}
+              key={id}
               type="button"
               className="cosmic-bust-tab"
-              data-active={mode === m ? "true" : "false"}
-              onClick={() => setMode(m)}
+              data-active={mode === id ? "true" : "false"}
+              onClick={() => setMode(id)}
             >
-              :{m}:
+              {label}
             </button>
           ))}
         </div>
         <button type="button" className="cosmic-bust-surge-btn" onClick={triggerSurge}>
-          :Surge Ring:
+          Pulse
         </button>
       </div>
     </div>

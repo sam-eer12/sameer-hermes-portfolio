@@ -16,12 +16,12 @@ import {
 const NOUS_CDN =
   "https://web-assets.nousresearch.com/marketing/64ae3d30463049bd9e6f380cda9cd9538a0f4edb";
 
-type CliTab = "ChadGPT" | "ProjectSLM" | "Connect";
+type CliTab = "ChadGPT" | "ProjectSLM" | "Portfolio";
 
 const CLI_COMMANDS: Record<CliTab, string> = {
   ChadGPT: "git clone https://huggingface.co/sam-eer12/chadGPT && python inference.py",
   ProjectSLM: "git clone https://github.com/sam-eer12/projectSLM.git && cd projectSLM",
-  Connect: "curl -sL https://sameers-portfolio-eosin.vercel.app | head -n 40",
+  Portfolio: "git clone https://github.com/sam-eer12/sameer-hermes-portfolio.git",
 };
 
 function InstallTerminal() {
@@ -59,12 +59,12 @@ function InstallTerminal() {
     }
   };
 
-  const tabs: CliTab[] = ["ChadGPT", "ProjectSLM", "Connect"];
+  const tabs: CliTab[] = ["ChadGPT", "ProjectSLM", "Portfolio"];
 
   return (
     <div className="hw-install-terminal" id="install">
       <p className="hw-install-terminal-label" id={labelId}>
-        Inspect ChadGPT 250M SLM or portfolio CLI
+        Run ChadGPT or inspect source locally
       </p>
       <div dir="ltr" data-orientation="horizontal" className="hw-install-terminal-body">
         <div
@@ -101,9 +101,7 @@ function InstallTerminal() {
                   }
                 }}
               >
-                <span aria-hidden="true">:</span>
                 {tab}
-                <span aria-hidden="true">:</span>
               </button>
             );
           })}
@@ -167,7 +165,7 @@ export function HeroSection() {
               textTransform: "none",
             }}
           >
-            <span>The Engineer</span> <span>That Builds</span> <span>With AI</span>
+            <span>I Train Small</span> <span>Models &amp; Ship</span> <span>Web Software</span>
           </h1>
 
           <p
@@ -180,8 +178,8 @@ export function HeroSection() {
               lineHeight: 1.5,
             }}
           >
-            Sameer Gupta · NSUT Delhi &apos;28. Custom 250M LLMs, YOLOv11 vision systems, and
-            real-time Three.js GLSL engineering.
+            Sameer Gupta, sophomore at NSUT Delhi. I built the ChadGPT 250M language model from
+            scratch in PyTorch alongside DRDO LiDAR perception, AeroRoute, and WebGL tools.
           </p>
 
           <div className="landing-hero-actions gap-2.5">
@@ -198,7 +196,7 @@ export function HeroSection() {
             >
               <HuggingFacePixelIcon className="size-4 shrink-0" />
               <span className="leading-none whitespace-nowrap cap-mono text-cap-trim">
-                ChadGPT 250M on HF
+                ChadGPT 250M
               </span>
               <span aria-hidden="true" className="hermes-button-hover-border" />
             </a>
@@ -216,7 +214,7 @@ export function HeroSection() {
             >
               <GitHubPixelIcon className="size-4 shrink-0" />
               <span className="leading-none whitespace-nowrap cap-mono text-cap-trim">
-                GitHub @sam-eer12
+                GitHub
               </span>
               <span aria-hidden="true" className="hermes-button-hover-border" />
             </a>
@@ -227,10 +225,10 @@ export function HeroSection() {
               data-slot="button"
               data-variant="ghost"
               data-size="m"
-              className="hermes-button group relative inline-flex cursor-pointer items-center justify-center rounded-none border border-white/25 bg-transparent outline-none select-none font-[family-name:var(--font-mono)] tracking-[0.1em] uppercase transition-[background-color,box-shadow,color,transform] duration-150 ease-out hover:duration-0 active:scale-[0.98] hermes-button-size-m text-[var(--hermes-white)]/85 hover:text-[var(--hermes-white)] hover:bg-white/10 gap-2 px-3 py-2.5"
+              className="hermes-button group relative inline-flex cursor-pointer items-center justify-center rounded-none border border-white/25 bg-transparent outline-none select-none tracking-[0.02em] transition-[background-color,box-shadow,color,transform] duration-150 ease-out hover:duration-0 active:scale-[0.98] hermes-button-size-m text-[var(--hermes-white)]/85 hover:text-[var(--hermes-white)] hover:bg-white/10 gap-2 px-3 py-2.5"
             >
-              <span className="leading-none whitespace-nowrap cap-mono text-cap-trim">
-                :Replay Loader:
+              <span className="leading-none whitespace-nowrap text-cap-trim">
+                Replay Intro
               </span>
             </button>
           </div>
@@ -354,7 +352,7 @@ export function ShowcaseSection() {
                 textTransform: "none",
               }}
             >
-              Sculpted WebGL &amp; Open AI Ecosystem
+              Shader Studio &amp; Open Weights
             </h2>
           </div>
           <p
@@ -367,8 +365,8 @@ export function ShowcaseSection() {
               lineHeight: 1.6,
             }}
           >
-            Custom GLSL shaders, open-weight small language models on Hugging Face, and production
-            deployments across Vercel and AWS.
+            Switch GLSL render modes on the bust above, inspect ChadGPT weights on Hugging Face, or
+            browse source code on GitHub.
           </p>
         </div>
 
@@ -388,14 +386,13 @@ export function ShowcaseSection() {
               <p
                 data-type-role="info"
                 style={{
-                  fontFamily: "var(--hpv2-font-meta)",
+                  fontFamily: "var(--font-body)",
                   fontSize: "var(--hpv2-type-info)",
-                  fontWeight: 400,
+                  fontWeight: 500,
                   lineHeight: 1.5,
-                  textTransform: "uppercase",
                 }}
               >
-                sam-eer12/chadGPT · 250M SLM
+                250M Open Weights
               </p>
               <h3
                 data-type-role="subheading"
@@ -443,14 +440,13 @@ export function ShowcaseSection() {
               <p
                 data-type-role="info"
                 style={{
-                  fontFamily: "var(--hpv2-font-meta)",
+                  fontFamily: "var(--font-body)",
                   fontSize: "var(--hpv2-type-info)",
-                  fontWeight: 400,
+                  fontWeight: 500,
                   lineHeight: 1.5,
-                  textTransform: "uppercase",
                 }}
               >
-                29+ Public Repositories
+                29+ Repositories
               </p>
               <h3
                 data-type-role="subheading"
@@ -498,14 +494,13 @@ export function ShowcaseSection() {
               <p
                 data-type-role="info"
                 style={{
-                  fontFamily: "var(--hpv2-font-meta)",
+                  fontFamily: "var(--font-body)",
                   fontSize: "var(--hpv2-type-info)",
-                  fontWeight: 400,
+                  fontWeight: 500,
                   lineHeight: 1.5,
-                  textTransform: "uppercase",
                 }}
               >
-                NSUT Delhi &apos;28 · CGPA 7.55
+                NSUT Delhi · 2024 - 2028
               </p>
               <h3
                 data-type-role="subheading"
@@ -556,7 +551,7 @@ interface ProjectCardData {
 
 const PROJECTS: ProjectCardData[] = [
   {
-    indexLabel: "#1 Language Model",
+    indexLabel: "Language Model",
     title: "ChadGPT - 250M AI LLM",
     description:
       "249.8M-parameter decoder-only SLM trained from scratch with GQA and RoPE, 4k context extension via Position Interpolation, ChatML SFT, and 42.55% zero-shot ARC-Easy.",
@@ -568,10 +563,10 @@ const PROJECTS: ProjectCardData[] = [
     image: "/assets/library/feature-1.webp",
   },
   {
-    indexLabel: "#2 Route Optimization",
+    indexLabel: "Route Optimization",
     title: "AeroRoute",
     description:
-      "Intelligent aerial and ground mobility route-planning engine optimizing travel time against live congestion and air-pollution telemetry via serverless AWS compute and Amplify.",
+      "Aerial and ground mobility route-planning engine optimizing travel time against live congestion and air-pollution telemetry via serverless AWS compute and Amplify.",
     href: "https://aeroroute.d1qrrcsa5p4lz3.amplifyapp.com/",
     primaryLabel: "Live App",
     secondaryHref: "https://github.com/sam-eer12/iiitd-hackathon",
@@ -580,7 +575,7 @@ const PROJECTS: ProjectCardData[] = [
     image: "/assets/library/feature-2.webp",
   },
   {
-    indexLabel: "#3 Computer Vision",
+    indexLabel: "Computer Vision",
     title: "VigilAI Surveillance",
     description:
       "Web-based AI surveillance platform achieving 94% accuracy with live video stream processing to detect anomalies and misconduct via YOLOv11, PyTorch, OpenCV, Flask, and React.",
@@ -590,7 +585,7 @@ const PROJECTS: ProjectCardData[] = [
     image: "/assets/library/feature-3.webp",
   },
   {
-    indexLabel: "#4 Legal Advisor AI",
+    indexLabel: "Legal Tech",
     title: "Amicus AI",
     description:
       "Fullstack legal advisor assistant offering location-aware legal guidance, case analysis, fraud detection, and document generation using Next.js, Gemini, MongoDB, and NodeMailer.",
@@ -600,7 +595,7 @@ const PROJECTS: ProjectCardData[] = [
     image: "/assets/library/feature-4.webp",
   },
   {
-    indexLabel: "#5 SIH2026 / DRDO LiDAR",
+    indexLabel: "SIH2026 · DRDO LiDAR",
     title: "NEXA - 2.5D LiDAR Mapping",
     description:
       "Smart India Hackathon 2026 (DRDO / iDEX PS 26053) autonomous perception system by Team KANVSS processing 64-beam 1.2M pts/sec LiDAR at 10 Hz for adaptive 2.5D obstacle mapping.",
@@ -612,7 +607,7 @@ const PROJECTS: ProjectCardData[] = [
     image: "/assets/library/feature-5.webp",
   },
   {
-    indexLabel: "#6 Open Source Contribution",
+    indexLabel: "Open Source",
     title: "BitChord",
     description:
       "Kotlin YouTube Music client contribution implementing Apple Music integration (#1222), multi-provider routing architecture, and automix headroom fixes for crisp playback.",
@@ -655,11 +650,10 @@ export function ProjectsSection() {
                 <p
                   data-type-role="info"
                   style={{
-                    fontFamily: "var(--hpv2-font-meta)",
+                    fontFamily: "var(--font-body)",
                     fontSize: "var(--hpv2-type-info)",
-                    fontWeight: 400,
+                    fontWeight: 500,
                     lineHeight: 1.5,
-                    textTransform: "uppercase",
                   }}
                 >
                   {proj.indexLabel}
@@ -698,7 +692,7 @@ export function ProjectsSection() {
                 >
                   {proj.description}
                 </p>
-                <div className="flex flex-wrap items-center gap-2 pt-1 hw-mono text-[11px] uppercase tracking-wider">
+                <div className="flex flex-wrap items-center gap-2 pt-1 text-xs font-medium">
                   <a
                     href={proj.href}
                     target="_blank"
@@ -760,31 +754,31 @@ interface AccordionItemData {
 const EXPERIENCE_ITEMS: AccordionItemData[] = [
   {
     id: "edu",
-    question: "What is your academic foundation at NSUT Delhi?",
+    question: "NSUT Delhi · B.Tech Instrumentation & Control (2024 - 2028)",
     answer:
       "Pursuing a B.Tech in Instrumentation and Control Engineering at Netaji Subhas University of Technology (NSUT), Delhi (August 2024 - May 2028) with a 7.55 CGPA, combining control systems engineering with fullstack software and deep learning research.",
   },
   {
     id: "exp",
-    question: "What open-source and community leadership experience do you bring?",
+    question: "GirlScript Summer of Code '25 & Google Gemini Ambassador",
     answer:
       "Served as an Open Source Contributor during GirlScript Summer of Code (July - Sept 2025), authored open-source PRs including BitChord Apple Music integration (#1414) and SIH2026 DRDO NEXA 2.5D LiDAR mapping, and led campus AI workshops as a Google Gemini Student Ambassador (Aug - Dec 2025).",
   },
   {
     id: "chadgpt",
-    question: "How was ChadGPT (250M SLM) architected and trained from scratch?",
+    question: "ChadGPT 250M Language Model Architecture & Training",
     answer:
       "Engineered a custom 249,832,448-parameter decoder-only PyTorch transformer featuring Grouped Query Attention (GQA) and Rotary Positional Embeddings (RoPE). Extended context length to 4,096 tokens via Position Interpolation, fine-tuned with ChatML SFT on SmolLM-Corpus and OpenHermes-2.5, and verified 42.55% zero-shot accuracy on ARC-Easy.",
   },
   {
     id: "certs",
-    question: "Which hackathons and programs have recognized your engineering work?",
+    question: "Hackathons & Recognitions",
     answer:
       "Certified across Frontend Battle 2.0 (IIT Bhubaneswar, June 2025), BuildWithDelhi 2.0 (Hack with India, Aug 2025), Kaarya Neeti Case Competition (E-Cell NSUT, Aug 2025), Zero to One Hackathon (Chandigarh University, Aug 2025), and the McKinsey Forward Learning Programme (Dec 2025).",
   },
   {
     id: "contact",
-    question: "How can engineering teams or collaborators get in touch?",
+    question: "Direct Contact & Profiles",
     answer:
       "Reach out directly at sameer870732@gmail.com or +91 9899901635, explore code repositories at github.com/sam-eer12, inspect model weights at huggingface.co/sam-eer12, or connect on LinkedIn (sameer-gupta-768b28312).",
   },
@@ -823,7 +817,7 @@ export function ExperienceFaqSection() {
               letterSpacing: "-0.02em",
             }}
           >
-            Dossier &amp; Experience
+            Background &amp; Experience
           </h2>
           <span className="mt-0.5 size-6 shrink-0 text-[var(--hermes-primary)]">
             <a
@@ -975,7 +969,7 @@ const ARSENAL_COLUMNS: ArsenalColumn[] = [
   },
   {
     name: "Web & 3D",
-    badge: "// core stack",
+    badge: "Primary",
     metric: "60fps",
     subtitle: "SSR + WebGL Shaders",
     featured: true,
@@ -1021,10 +1015,10 @@ const ARSENAL_COLUMNS: ArsenalColumn[] = [
 
 export function SkillsPortalSection() {
   return (
-    <section aria-label="Technical Arsenal" className="landing-portal" id="portal">
+    <section aria-label="Engineering Stack" className="landing-portal" id="portal">
       <div className="mx-auto w-full max-w-[calc(var(--hw-teams-col)+2*var(--hw-teams-pad-x))] px-[var(--hw-teams-pad-x)] landing-portal-column">
         <div aria-label="Skill Domains" className="landing-plan-chips">
-          {["AI/ML", "Three.js", "Next.js", "Systems"].map((chip) => (
+          {["AI & ML", "Three.js", "Next.js", "Systems"].map((chip) => (
             <span
               key={chip}
               data-chip=""
@@ -1032,9 +1026,9 @@ export function SkillsPortalSection() {
               className="inline-flex h-[var(--hpv2-chip-h)] shrink-0 items-center gap-1.5 rounded-r-xs px-1.5 border border-current whitespace-nowrap"
             >
               <span
-                className="hpv2-label-face font-medium uppercase leading-none text-cap-trim"
+                className="hpv2-label-face font-medium leading-none text-cap-trim"
                 style={{
-                  fontFamily: "var(--font-mono)",
+                  fontFamily: "var(--font-body)",
                   fontSize: "var(--hpv2-type-label)",
                   fontWeight: 500,
                 }}
@@ -1057,7 +1051,7 @@ export function SkillsPortalSection() {
               letterSpacing: "-0.02em",
             }}
           >
-            Technical Arsenal
+            Engineering Stack
           </h2>
           <span className="mt-0.5 size-6 shrink-0 text-[var(--hermes-primary)]">
             <img alt="" height={24} width={24} src={`${NOUS_CDN}/assets/hermes-agent/globe.svg`} />
@@ -1132,11 +1126,11 @@ export function SkillsPortalSection() {
             >
               <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="hw-mono text-xs font-medium uppercase tracking-wider text-[var(--hermes-primary)]">
+                  <span className="text-xs font-semibold text-[var(--hermes-primary)]">
                     {col.name}
                   </span>
                   {col.badge ? (
-                    <span className="hw-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 bg-[var(--hermes-primary)] text-[var(--hermes-white)]">
+                    <span className="text-[11px] font-medium px-2 py-0.5 bg-[var(--hermes-primary)] text-[var(--hermes-white)]">
                       {col.badge}
                     </span>
                   ) : null}
@@ -1147,11 +1141,11 @@ export function SkillsPortalSection() {
                     fontSize: "52px",
                     lineHeight: 0.9,
                   }}
-                  className="uppercase text-[var(--hw-teams-ink)]"
+                  className="text-[var(--hw-teams-ink)]"
                 >
                   {col.metric}
                 </p>
-                <p className="hw-mono text-[11px] uppercase opacity-70">{col.subtitle}</p>
+                <p className="text-xs opacity-75">{col.subtitle}</p>
                 <ul className="mt-2 flex flex-col gap-1.5 text-sm text-[var(--hw-teams-ink)]">
                   {col.items.map((sk) => (
                     <li key={sk} className="leading-snug">
@@ -1231,14 +1225,13 @@ export function ContactSection() {
               data-type-role="info"
               className="text-[var(--hermes-primary)]"
               style={{
-                fontFamily: "var(--hpv2-font-meta)",
+                fontFamily: "var(--font-body)",
                 fontSize: "var(--hpv2-type-info)",
-                fontWeight: 400,
+                fontWeight: 500,
                 lineHeight: 1.5,
-                textTransform: "uppercase",
               }}
             >
-              Get in Touch // Direct Inquiry
+              Get in touch
             </p>
             <h2
               data-type-role="heading"
@@ -1272,7 +1265,7 @@ export function ContactSection() {
         <form onSubmit={onSubmit} className="hw-contact-card">
           <div className="hw-contact-grid">
             <label className="hw-contact-field">
-              <span className="hw-mono text-[11px] uppercase tracking-wider opacity-80">
+              <span className="text-xs font-medium opacity-80">
                 Your Name
               </span>
               <input
@@ -1284,7 +1277,7 @@ export function ContactSection() {
               />
             </label>
             <label className="hw-contact-field">
-              <span className="hw-mono text-[11px] uppercase tracking-wider opacity-80">
+              <span className="text-xs font-medium opacity-80">
                 Your Email
               </span>
               <input
@@ -1298,7 +1291,7 @@ export function ContactSection() {
           </div>
 
           <label className="hw-contact-field mb-6">
-            <span className="hw-mono text-[11px] uppercase tracking-wider opacity-80">
+            <span className="text-xs font-medium opacity-80">
               Message
             </span>
             <textarea
@@ -1320,7 +1313,7 @@ export function ContactSection() {
               className="hw-contact-submit hermes-button group relative inline-flex cursor-pointer items-center justify-center rounded-none border-0 outline-none select-none font-[family-name:var(--font-mono)] tracking-[0.1em] uppercase text-[length:var(--hw-teams-label)]"
             >
               <span className="leading-none whitespace-nowrap cap-mono text-cap-trim">
-                {submitting ? "Sending...." : "Submit Message ->"}
+                {submitting ? "Sending...." : "Send Message"}
               </span>
             </button>
 
@@ -1328,7 +1321,7 @@ export function ContactSection() {
               <p
                 role="status"
                 aria-live="polite"
-                className="hw-mono text-xs uppercase tracking-wider text-[var(--hermes-primary)]"
+                className="text-xs font-medium text-[var(--hermes-primary)]"
               >
                 {result}
               </p>
@@ -1433,9 +1426,9 @@ const FOOTER_COLUMNS: FooterNavColumn[] = [
     items: [
       { label: "ChadGPT 250M", href: "https://huggingface.co/sam-eer12/chadGPT", external: true },
       { label: "Project SLM", href: "https://github.com/sam-eer12/projectSLM", external: true },
-      { label: "3D Shader Studio", href: "#downloads" },
-      { label: "Technical Matrix", href: "#portal" },
-      { label: "Experience & FAQ", href: "#faqs" },
+      { label: "Shader Studio", href: "#downloads" },
+      { label: "Engineering Stack", href: "#portal" },
+      { label: "Experience", href: "#faqs" },
       { label: "Contact", href: "#contact" },
     ],
   },

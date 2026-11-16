@@ -61,7 +61,7 @@ const PRESET_SECTIONS: Record<NavPreset, SubnavSection[]> = {
         {
           label: "Overview & 3D Studio",
           href: "#downloads",
-          description: "Interactive Three.js GLSL sculpture & architectural stack",
+          description: "Interactive Three.js sculpture and shader controls",
         },
         {
           label: "Education & Experience",
@@ -71,11 +71,11 @@ const PRESET_SECTIONS: Record<NavPreset, SubnavSection[]> = {
       ],
     },
     {
-      category: "Arsenal",
+      category: "Skills",
       heading: "Stack",
       links: [
         {
-          label: "Technical Matrix",
+          label: "Engineering Stack",
           href: "#portal",
           description: "PyTorch, Next.js, Three.js, Flask, YOLOv11, CUDA",
         },

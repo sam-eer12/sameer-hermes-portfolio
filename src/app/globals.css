@@ -115,13 +115,14 @@ html {
   appearance: none;
   border: 1px solid rgba(242, 242, 242, 0.24);
   background: rgba(6, 7, 22, 0.72);
-  color: rgba(242, 242, 242, 0.8);
-  padding: 5px 8px;
-  font-family: var(--font-mono), monospace;
-  font-size: 11px;
+  color: rgba(242, 242, 242, 0.84);
+  padding: 6px 10px;
+  font-family: var(--font-body), sans-serif;
+  font-size: 12px;
+  font-weight: 500;
   line-height: 1;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  text-transform: none;
   cursor: pointer;
   transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease;
 }
@@ -142,12 +143,13 @@ html {
   border: 1px solid var(--hw-accent-pink, #f878cf);
   background: rgba(248, 120, 207, 0.14);
   color: #f878cf;
-  padding: 5px 10px;
-  font-family: var(--font-mono), monospace;
-  font-size: 11px;
+  padding: 6px 12px;
+  font-family: var(--font-body), sans-serif;
+  font-size: 12px;
+  font-weight: 500;
   line-height: 1;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  text-transform: none;
   cursor: pointer;
   transition: background-color 140ms ease, color 140ms ease, transform 100ms ease;
 }
@@ -172,10 +174,12 @@ html {
   gap: 14px;
   padding: 14px 16px;
   border-top: 1px solid rgba(242, 242, 242, 0.18);
-  font-family: var(--font-mono), monospace;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-family: var(--font-body), sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  text-transform: none;
+  letter-spacing: 0;
   color: var(--hermes-white, #f2f2f2);
 }
 
@@ -306,12 +310,12 @@ html[data-marketing-theme="dark"] .arsenal-card[data-featured="true"] {
 }
 
 .preloader__badge {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-family: var(--font-body), sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0;
   color: #404144;
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
 .preloader__skip {
@@ -320,11 +324,11 @@ html[data-marketing-theme="dark"] .arsenal-card[data-featured="true"] {
   border: 1px solid rgba(64, 65, 68, 0.28);
   background: rgba(239, 243, 243, 0.82);
   color: #404144;
-  padding: 6px 10px;
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  padding: 6px 12px;
+  font-family: var(--font-body), sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
   cursor: pointer;
   transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease;
 }
@@ -373,15 +377,33 @@ html[data-marketing-theme="dark"] .arsenal-card[data-featured="true"] {
   z-index: 3;
   transform: translate(-50%, -50%);
   pointer-events: none;
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 12px;
+  font-family: var(--font-body), sans-serif;
+  font-size: 13px;
+  font-weight: 500;
   line-height: 1.4;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
   color: #404144;
-  opacity: 0.48;
+  opacity: 0.56;
   transition: opacity 220ms ease, color 220ms ease;
   white-space: nowrap;
+}
+
+/* Override Hermes production.css forced uppercase terminal chrome on CLI switcher */
+.hw-install-terminal-label {
+  text-transform: none !important;
+  font-family: var(--font-body), sans-serif !important;
+  font-size: 13px !important;
+  letter-spacing: 0 !important;
+  opacity: 0.84;
+  margin: 0 0 12px !important;
+}
+
+.hw-install-terminal-tab {
+  justify-content: center !important;
+  font-family: var(--font-body), sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
 }
 
 .preloader__text--visible {

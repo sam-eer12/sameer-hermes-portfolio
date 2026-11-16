@@ -231,17 +231,17 @@ export function BeFreakyPreloader() {
       role="status"
       className={`preloader ${phase === "exiting" ? "preloader--exiting" : ""}`}
     >
-      {/* Top bar hint & skip control */}
+      {/* Top bar control */}
       <div className="preloader__chrome">
         <span className="preloader__badge">
-          SAMEER GUPTA // PORTFOLIO PREVIEW
+          Sameer Gupta
         </span>
         <button
           type="button"
           onClick={dismissPreloader}
           className="preloader__skip"
         >
-          {holdMode ? ":Enter Portfolio:" : ":Skip Intro:"}
+          {holdMode ? "Enter" : "Skip"}
         </button>
       </div>
 
@@ -272,8 +272,8 @@ export function BeFreakyPreloader() {
         className={`preloader__text ${phase === "ready" ? "preloader__text--visible" : ""}`}
       >
         {phase === "ready"
-          ? "SAMEER GUPTA / PORTFOLIO READY"
-          : "MOVE CURSOR TO PREVIEW WORKS"}
+          ? "Ready"
+          : "Move cursor to preview"}
       </p>
 
       {/* Bottom-right twin-square rolling counter */}

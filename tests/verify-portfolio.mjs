@@ -98,6 +98,7 @@ test("Portfolio data and external identity links match user profiles without em-
     path.join(ROOT, "src", "components", "sections.tsx"),
     path.join(ROOT, "src", "components", "navigation.tsx"),
     path.join(ROOT, "src", "components", "befreaky-preloader.tsx"),
+    path.join(ROOT, "src", "components", "cosmic-bust-3d.tsx"),
     path.join(ROOT, "src", "app", "layout.tsx"),
   ];
   const combined = files.map((f) => fs.readFileSync(f, "utf8")).join("\n");
@@ -127,8 +128,19 @@ test("Portfolio data and external identity links match user profiles without em-
     assert.ok(combined.includes(tok), `Missing required portfolio token: ${tok}`);
   }
 
-  for (const forbidden of ["Ocenaus AI", "Haryana Roadways", "HrRoadways"]) {
-    assert.ok(!combined.includes(forbidden), `Legacy project reference must be removed: ${forbidden}`);
+  for (const forbidden of [
+    "Ocenaus AI",
+    "Haryana Roadways",
+    "HrRoadways",
+    ":Surge Ring:",
+    ":Replay Loader:",
+    ":{m}:",
+    "THREE.JS //",
+    "// core stack",
+    "The Engineer That Builds With AI",
+    "DRAG TO ORBIT",
+  ]) {
+    assert.ok(!combined.includes(forbidden), `Disallowed legacy or AI-template copy found: ${forbidden}`);
   }
 
   assert.ok(!combined.includes("—"), "Visible UI copy must not include em-dashes");
@@ -188,11 +200,11 @@ test("Next.js SSR HTML output includes preloader, portfolio markup, Three.js her
   assert.match(html, /befreaky-preloader/);
   assert.match(html, /preloader__square__container/);
   assert.match(html, /preloader__stickers/);
-  assert.match(html, /The Engineer/);
+  assert.match(html, /I Train Small/);
   assert.match(html, /cosmic-bust-3d/);
   assert.match(html, /hw-feature-parallax/);
   assert.match(html, /hw-footer-reveal/);
   assert.match(html, /ChadGPT - 250M AI LLM/);
   assert.match(html, /Selected Projects/);
-  assert.match(html, /Technical Arsenal/);
+  assert.match(html, /Engineering Stack/);
 });
