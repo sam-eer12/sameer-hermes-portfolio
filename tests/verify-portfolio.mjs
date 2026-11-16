@@ -213,4 +213,8 @@ test("Next.js SSR HTML output includes preloader, portfolio markup, Three.js her
   assert.match(html, /meta name="keywords"[^>]+Sameer Gupta/);
   assert.match(html, /meta property="og:image"[^>]+og-thumbnail\.jpg/);
   assert.match(html, /meta name="twitter:image"[^>]+og-thumbnail\.jpg/);
+  assert.match(
+    html,
+    /meta name="google-site-verification" content="z89_y2w8b2a0dGcpC0S3hy4ObEPHA1A09Ts5T3aHZEU"/
+  );
 });
