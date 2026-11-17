@@ -3,6 +3,13 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.md$/,
+      type: "asset/source",
+    });
+    return config;
+  },
   experimental: {
     optimizePackageImports: ["three"],
   },

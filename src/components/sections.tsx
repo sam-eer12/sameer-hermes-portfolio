@@ -1,12 +1,15 @@
 import React from "react";
+import Link from "next/link";
 import { CosmicBust3D } from "./cosmic-bust-3d";
 import { FitText } from "./chrome";
+import { PROJECTS } from "../data/projects";
 import {
   ContactForm,
   ExperienceFaqAccordion,
   FooterHashLink,
   FooterRevealScrollSync,
   InstallTerminal,
+  ProjectCardArticle,
   ReplayIntroButton,
   type AccordionItemData,
 } from "./sections-client";
@@ -310,89 +313,6 @@ export function ShowcaseSection() {
   );
 }
 
-interface ProjectCardData {
-  indexLabel: string;
-  title: string;
-  description: string;
-  href: string;
-  primaryLabel: string;
-  secondaryHref?: string;
-  secondaryLabel?: string;
-  artClass: string;
-  image: string;
-}
-
-const PROJECTS: ProjectCardData[] = [
-  {
-    indexLabel: "Language Model",
-    title: "ChadGPT - 250M AI LLM",
-    description:
-      "249.8M-parameter decoder-only SLM trained from scratch with GQA and RoPE, 4k context extension via Position Interpolation, ChatML SFT, and 42.55% zero-shot ARC-Easy.",
-    href: "https://huggingface.co/sam-eer12/chadGPT",
-    primaryLabel: "Hugging Face",
-    secondaryHref: "https://github.com/sam-eer12/projectSLM",
-    secondaryLabel: "GitHub Repo",
-    artClass: "landing-feature-art--feature-connect",
-    image: "/assets/library/feature-1.webp",
-  },
-  {
-    indexLabel: "Route Optimization",
-    title: "AeroRoute",
-    description:
-      "Aerial and ground mobility route-planning engine optimizing travel time against live congestion and air-pollution telemetry via serverless AWS compute and Amplify.",
-    href: "https://aeroroute.d1qrrcsa5p4lz3.amplifyapp.com/",
-    primaryLabel: "Live App",
-    secondaryHref: "https://github.com/sam-eer12/iiitd-hackathon",
-    secondaryLabel: "GitHub Repo",
-    artClass: "landing-feature-art--feature-memory",
-    image: "/assets/library/feature-2.webp",
-  },
-  {
-    indexLabel: "Computer Vision",
-    title: "VigilAI Surveillance",
-    description:
-      "Web-based AI surveillance platform achieving 94% accuracy with live video stream processing to detect anomalies and misconduct via YOLOv11, PyTorch, OpenCV, Flask, and React.",
-    href: "https://github.com/sam-eer12/VigilAI-survillance-project",
-    primaryLabel: "GitHub Repo",
-    artClass: "landing-feature-art--feature-automation",
-    image: "/assets/library/feature-3.webp",
-  },
-  {
-    indexLabel: "Legal Tech",
-    title: "Amicus AI",
-    description:
-      "Fullstack legal advisor assistant offering location-aware legal guidance, case analysis, fraud detection, and document generation using Next.js, Gemini, MongoDB, and NodeMailer.",
-    href: "https://amicusai.vercel.app/",
-    primaryLabel: "Live App",
-    artClass: "landing-feature-art--feature-delegate",
-    image: "/assets/library/feature-4.webp",
-  },
-  {
-    indexLabel: "SIH2026 · DRDO LiDAR",
-    title: "NEXA - 2.5D LiDAR Mapping",
-    description:
-      "Smart India Hackathon 2026 (DRDO / iDEX PS 26053) autonomous perception system by Team KANVSS processing 64-beam 1.2M pts/sec LiDAR at 10 Hz for adaptive 2.5D obstacle mapping.",
-    href: "https://nexa-drdo.duckdns.org/",
-    primaryLabel: "Live Project",
-    secondaryHref: "https://github.com/sam-eer12/sih2026",
-    secondaryLabel: "GitHub (sih2026)",
-    artClass: "landing-feature-art--feature-search",
-    image: "/assets/library/feature-5.webp",
-  },
-  {
-    indexLabel: "Open Source",
-    title: "BitChord",
-    description:
-      "Kotlin YouTube Music client contribution implementing Apple Music integration (#1222), multi-provider routing architecture, and automix headroom fixes for crisp playback.",
-    href: "https://github.com/kushagrasinghx/BitChord/pull/1414",
-    primaryLabel: "Contribution PR #1414",
-    secondaryHref: "https://github.com/sam-eer12/BitChord",
-    secondaryLabel: "Fork Repo",
-    artClass: "landing-feature-art--feature-sandbox",
-    image: "/assets/library/feature-6.webp",
-  },
-];
-
 export function ProjectsSection() {
   return (
     <section aria-label="Selected Projects" className="landing-features" id="features">
@@ -418,7 +338,7 @@ export function ProjectsSection() {
 
         <div className="landing-feature-grid">
           {PROJECTS.map((proj) => (
-            <article key={proj.title} className="landing-feature">
+            <ProjectCardArticle key={proj.slug} slug={proj.slug}>
               <div className="landing-feature-heading">
                 <p
                   data-type-role="info"
@@ -441,14 +361,12 @@ export function ProjectsSection() {
                     lineHeight: 1.1,
                   }}
                 >
-                  <a
-                    href={proj.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <Link
+                    href={`/projects/${proj.slug}`}
                     className="underline decoration-current/40 underline-offset-4 hover:decoration-current"
                   >
                     {proj.title}
-                  </a>
+                  </Link>
                 </h3>
               </div>
 
@@ -466,11 +384,18 @@ export function ProjectsSection() {
                   {proj.description}
                 </p>
                 <div className="flex flex-wrap items-center gap-2 pt-1 text-xs font-medium">
+                  <Link
+                    href={`/projects/${proj.slug}`}
+                    className="inline-flex items-center gap-1.5 border border-[var(--hermes-primary)]/40 bg-[var(--hermes-primary)] px-2.5 py-1 text-white transition-colors hover:bg-[var(--hw-accent-pink)] hover:text-[#0d0d1a] hover:border-[var(--hw-accent-pink)]"
+                  >
+                    <span>Docs &amp; Diagrams</span>
+                    <span aria-hidden="true">-&gt;</span>
+                  </Link>
                   <a
                     href={proj.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 border border-[var(--hermes-primary)]/40 bg-[var(--hermes-primary)] px-2.5 py-1 text-white transition-colors hover:bg-[var(--hw-accent-pink)] hover:text-[#0d0d1a] hover:border-[var(--hw-accent-pink)]"
+                    className="inline-flex items-center gap-1.5 border border-current/30 px-2.5 py-1 transition-colors hover:border-[var(--hermes-primary)] hover:text-[var(--hermes-primary)]"
                   >
                     <span>{proj.primaryLabel}</span>
                     <span aria-hidden="true">-&gt;</span>
@@ -490,11 +415,9 @@ export function ProjectsSection() {
               </div>
 
               <div className={`landing-feature-art ${proj.artClass}`}>
-                <a
-                  href={proj.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Open ${proj.title}`}
+                <Link
+                  href={`/projects/${proj.slug}`}
+                  aria-label={`Open ${proj.title} documentation and Mermaid diagrams`}
                   className="block"
                 >
                   <figure className="hw-teams-plate bg-hermes relative h-[var(--hw-teams-plate-h)] w-full overflow-clip rounded-t-md">
@@ -508,9 +431,9 @@ export function ProjectsSection() {
                       />
                     </div>
                   </figure>
-                </a>
+                </Link>
               </div>
-            </article>
+            </ProjectCardArticle>
           ))}
         </div>
       </div>
@@ -1050,9 +973,9 @@ const FOOTER_COLUMNS: FooterNavColumn[] = [
       { prefix: "Go to ", label: "GitHub", href: "https://github.com/sam-eer12", external: true },
       { prefix: "Go to ", label: "Hugging Face", href: "https://huggingface.co/sam-eer12", external: true },
       { prefix: "Go to ", label: "LinkedIn", href: "https://www.linkedin.com/in/sameer-gupta-768b28312", external: true },
-      { prefix: "Go to ", label: "BitChord PR", href: "https://github.com/kushagrasinghx/BitChord/pull/1414", external: true },
+      { prefix: "Go to ", label: "BitChord Fork", href: "https://github.com/sam-eer12/BitChord", external: true },
       { prefix: "Go to ", label: "SIH2026 Repo", href: "https://github.com/sam-eer12/sih2026", external: true },
-      { prefix: "Go to ", label: "Legacy Site", href: "https://sameers-portfolio-eosin.vercel.app/", external: true },
+      { prefix: "Go to ", label: "AWS-DTU Repo", href: "https://github.com/Shubh3155/AWS-DTU", external: true },
     ],
   },
 ];

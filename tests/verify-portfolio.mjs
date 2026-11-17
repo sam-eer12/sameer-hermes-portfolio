@@ -23,6 +23,12 @@ test("public WebP image library and 12 preloader stickers are staged with zero l
     "portal-art.webp",
     "research-art.webp",
     "footer.webp",
+    "project-chadgpt.webp",
+    "project-aeroroute.webp",
+    "project-vigilai.webp",
+    "project-amicus-ai.webp",
+    "project-nexa.webp",
+    "project-bitchord.webp",
   ];
   for (const f of libFiles) {
     const p = path.join(ROOT, "public", "assets", "library", f);
@@ -42,8 +48,11 @@ test("public WebP image library and 12 preloader stickers are staged with zero l
     "src/components/befreaky-preloader.tsx",
     "src/components/sections.tsx",
     "src/components/navigation.tsx",
+    "src/components/markdown-preview.tsx",
+    "src/data/projects.ts",
     "src/app/layout.tsx",
     "src/app/page.tsx",
+    "src/app/projects/[slug]/page.tsx",
   ];
   for (const rel of srcFiles) {
     const content = fs.readFileSync(path.join(ROOT, rel), "utf8").replace(/\/og-thumbnail\.jpg/g, "");
@@ -67,6 +76,11 @@ test("BeFreakyPreloader implements twin-square counter and 12 WebP mouse-trail s
     assert.ok(src.includes(expected), `Preloader missing ${expected}`);
   }
   assert.ok(!src.includes("—"), "Preloader copy must not include em-dashes");
+  assert.match(src, /__hermesInitialDocChecked/);
+  assert.match(src, /hermes-preloader-seen/);
+  const navSrc = fs.readFileSync(path.join(ROOT, "src", "components", "navigation.tsx"), "utf8");
+  assert.match(navSrc, /useRouter/);
+  assert.match(navSrc, /usePathname/);
 });
 
 test("Three.js CosmicBust3D component defines GLSL shaders and uses cosmic-bust.webp", () => {
@@ -102,7 +116,10 @@ test("Portfolio data and external identity links match user profiles without em-
     path.join(ROOT, "src", "components", "navigation.tsx"),
     path.join(ROOT, "src", "components", "befreaky-preloader.tsx"),
     path.join(ROOT, "src", "components", "cosmic-bust-3d.tsx"),
+    path.join(ROOT, "src", "components", "markdown-preview.tsx"),
+    path.join(ROOT, "src", "data", "projects.ts"),
     path.join(ROOT, "src", "app", "layout.tsx"),
+    path.join(ROOT, "src", "app", "projects", "[slug]", "page.tsx"),
   ];
   const combined = files.map((f) => fs.readFileSync(f, "utf8")).join("\n");
 
@@ -112,6 +129,7 @@ test("Portfolio data and external identity links match user profiles without em-
     "https://huggingface.co/sam-eer12",
     "https://huggingface.co/sam-eer12/chadGPT",
     "https://aeroroute.d1qrrcsa5p4lz3.amplifyapp.com/",
+    "https://github.com/Shubh3155/AWS-DTU",
     "https://nexa-drdo.duckdns.org/",
     "https://github.com/sam-eer12/sih2026",
     "https://github.com/kushagrasinghx/BitChord/pull/1414",
@@ -226,4 +244,61 @@ test("Next.js SSR HTML output includes preloader, portfolio markup, Three.js her
   assert.match(sitemapXml, /<loc>https:\/\/sameerg\.vercel\.app\/<\/loc>/);
   assert.match(sitemapXml, /<image:loc>https:\/\/sameerg\.vercel\.app\/og-thumbnail\.jpg<\/image:loc>/);
   assert.match(sitemapXml, /Sameer_Gupta_Resume\.pdf/);
+
+  const projectSlugs = ["chadgpt", "aeroroute", "vigilai", "amicus-ai", "nexa", "bitchord"];
+  for (let i = 0; i < projectSlugs.length; i++) {
+    const slug = projectSlugs[i];
+    assert.ok(html.includes(`/projects/${slug}`), `Homepage SSR HTML must link to /projects/${slug}`);
+    assert.ok(
+      html.includes(`/assets/library/feature-${i + 1}.webp`),
+      `Homepage SSR HTML must retain original Hermes cover image feature-${i + 1}.webp`
+    );
+    assert.ok(sitemapXml.includes(`/projects/${slug}`), `sitemap.xml must include /projects/${slug}`);
+    assert.ok(
+      sitemapXml.includes(`project-${slug}.webp`),
+      `sitemap.xml must include project-${slug}.webp image tag`
+    );
+    const projHtmlPath = path.join(ROOT, ".next", "server", "app", "projects", `${slug}.html`);
+    assert.ok(fs.existsSync(projHtmlPath), `Project detail SSR HTML missing for ${slug}`);
+    const projHtml = fs.readFileSync(projHtmlPath, "utf8");
+    assert.match(projHtml, /hw-project-hero/);
+    assert.match(projHtml, /hw-md-toolbar/);
+    assert.match(projHtml, /hw-mermaid-card/);
+    assert.match(projHtml, /hw-project-explore-section/);
+    assert.ok(
+      projHtml.includes(`/assets/library/project-${slug}.webp`),
+      `Project page ${slug} must render thumbnail project-${slug}.webp`
+    );
+    assert.match(projHtml, /README\.md/);
+  }
+  const aeroHtml = fs.readFileSync(
+    path.join(ROOT, ".next", "server", "app", "projects", "aeroroute.html"),
+    "utf8"
+  );
+  assert.ok(
+    aeroHtml.includes("https://github.com/Shubh3155/AWS-DTU"),
+    "AeroRoute project page must reference https://github.com/Shubh3155/AWS-DTU"
+  );
+});
+
+test("Each project description lives in src/descriptions/*.md with Mermaid diagrams and is imported in projects.ts", () => {
+  const projectsSrc = fs.readFileSync(path.join(ROOT, "src", "data", "projects.ts"), "utf8");
+  assert.ok(!projectsSrc.includes("```mermaid"), "projects.ts must import .md files instead of embedding inline markdown");
+
+  const projectSlugs = ["chadgpt", "aeroroute", "vigilai", "amicus-ai", "nexa", "bitchord"];
+  for (const slug of projectSlugs) {
+    assert.ok(
+      projectsSrc.includes(`from "../descriptions/${slug}.md"`),
+      `projects.ts must import ../descriptions/${slug}.md`
+    );
+    const mdPath = path.join(ROOT, "src", "descriptions", `${slug}.md`);
+    assert.ok(fs.existsSync(mdPath), `Missing markdown description file: src/descriptions/${slug}.md`);
+    const mdContent = fs.readFileSync(mdPath, "utf8");
+    assert.ok(!mdContent.includes("—"), `src/descriptions/${slug}.md must not contain em-dashes`);
+    const mermaidBlocks = mdContent.match(/```mermaid/g) || [];
+    assert.ok(
+      mermaidBlocks.length >= 2,
+      `Expected at least 2 Mermaid charts in src/descriptions/${slug}.md, found ${mermaidBlocks.length}`
+    );
+  }
 });

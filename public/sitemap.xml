@@ -5,7 +5,7 @@
 >
   <url>
     <loc>https://sameerg.vercel.app/</loc>
-    <lastmod>2026-11-16</lastmod>
+    <lastmod>2026-11-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -23,5 +23,71 @@
     <lastmod>2026-11-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sameerg.vercel.app/projects/chadgpt</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://sameerg.vercel.app/assets/library/project-chadgpt.webp</image:loc>
+      <image:title>ChadGPT - 250M AI LLM</image:title>
+      <image:caption>249.8M-parameter decoder-only small language model built from scratch in PyTorch with GQA, RoPE, and ChatML SFT</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://sameerg.vercel.app/projects/aeroroute</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://sameerg.vercel.app/assets/library/project-aeroroute.webp</image:loc>
+      <image:title>AeroRoute</image:title>
+      <image:caption>Exposure-aware mobility and PM2.5 air-quality route comparison engine on AWS Amplify and Lightsail</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://sameerg.vercel.app/projects/vigilai</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://sameerg.vercel.app/assets/library/project-vigilai.webp</image:loc>
+      <image:title>VigilAI Surveillance</image:title>
+      <image:caption>Real-time YOLOv11 multi-threaded AI surveillance dashboard with Flask and React</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://sameerg.vercel.app/projects/amicus-ai</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://sameerg.vercel.app/assets/library/project-amicus-ai.webp</image:loc>
+      <image:title>Amicus AI</image:title>
+      <image:caption>Jurisdiction-aware legal consultation platform with Ghost Vault zero-retention and Contract Forge</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://sameerg.vercel.app/projects/nexa</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://sameerg.vercel.app/assets/library/project-nexa.webp</image:loc>
+      <image:title>NEXA - 2.5D LiDAR Mapping</image:title>
+      <image:caption>SIH 2026 DRDO adaptive variable-resolution 2.5D polar LiDAR perception and Three.js viewer</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://sameerg.vercel.app/projects/bitchord</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://sameerg.vercel.app/assets/library/project-bitchord.webp</image:loc>
+      <image:title>BitChord</image:title>
+      <image:caption>BitChord PR #1414 Apple MusicKit integration, multi-provider playback routing, and automix headroom fix</image:caption>
+    </image:image>
   </url>
 </urlset>

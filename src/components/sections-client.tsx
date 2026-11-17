@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useId, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { triggerPreloaderReplay } from "./befreaky-preloader";
 import { smoothScrollToHash } from "./navigation";
 
@@ -408,5 +409,95 @@ export function FooterHashLink({
     >
       {children}
     </a>
+  );
+}
+
+export function ProjectCardArticle({
+  slug,
+  children,
+}: {
+  slug: string;
+  children: React.ReactNode;
+}) {
+  const router = useRouter();
+  const href = `/projects/${slug}`;
+
+  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+    const target = e.target as HTMLElement | null;
+    if (target?.closest("a, button")) return;
+    if (window.getSelection()?.toString()) return;
+    if (e.metaKey || e.ctrlKey) {
+      window.open(href, "_blank", "noopener,noreferrer");
+      return;
+    }
+    router.push(href);
+  };
+
+  return (
+    <article
+      onClick={handleClick}
+      className="landing-feature hw-project-card cursor-pointer"
+    >
+      {children}
+    </article>
+  );
+}
+
+export function ProjectCliBar({ command }: { command: string }) {
+  const [copied, setCopied] = useState(false);
+  const timerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) window.clearTimeout(timerRef.current);
+    };
+  }, []);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(command);
+      setCopied(true);
+      if (timerRef.current) window.clearTimeout(timerRef.current);
+      timerRef.current = window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      // Ignore clipboard failure
+    }
+  };
+
+  return (
+    <div className="hw-install-terminal" style={{ maxWidth: "100%" }}>
+      <p className="hw-install-terminal-label">Quick clone / run command</p>
+      <div className="hw-install-terminal-body">
+        <div className="hw-install-terminal-panel">
+          <code>{command}</code>
+          <button
+            type="button"
+            onClick={handleCopy}
+            aria-label={copied ? "Copied command" : "Copy command"}
+            className="hw-install-terminal-copy"
+          >
+            {copied ? (
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+                className="block shrink-0 size-4"
+              >
+                <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" />
+              </svg>
+            ) : (
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+                className="block shrink-0 size-4"
+              >
+                <path d="M6 6h16v2H6zM2 2h16v2H2zm4 6h2v12H6zM2 4h2v12H2zm4 16h16v2H6zM20 8h2v12h-2zm-4-4h2v2h-2zM2 16h4v2H2z" />
+              </svg>
+            )}
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

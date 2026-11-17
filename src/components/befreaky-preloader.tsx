@@ -25,6 +25,33 @@ const STEP_SCHEDULE_MS = [120, 420, 760, 1140, 1540, 1980, 2420, 2860, 3260, 368
 
 type LoaderPhase = "loading" | "ready" | "exiting" | "done";
 
+const PRELOADER_SEEN_KEY = "hermes-preloader-seen";
+
+declare global {
+  interface Window {
+    __hermesInitialDocChecked?: boolean;
+  }
+}
+
+function isHoldQuery(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return new URLSearchParams(window.location.search).get("loader") === "hold";
+  } catch {
+    return false;
+  }
+}
+
+function getNavigationType(): string | undefined {
+  if (typeof window === "undefined" || typeof performance === "undefined") return undefined;
+  try {
+    const entries = performance.getEntriesByType("navigation") as PerformanceNavigationTiming[];
+    return entries[0]?.type;
+  } catch {
+    return undefined;
+  }
+}
+
 export function triggerPreloaderReplay() {
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent("replay-preloader"));
@@ -32,7 +59,12 @@ export function triggerPreloaderReplay() {
 }
 
 export function BeFreakyPreloader() {
-  const [phase, setPhase] = useState<LoaderPhase>("loading");
+  const [phase, setPhase] = useState<LoaderPhase>(() => {
+    if (typeof window !== "undefined" && window.__hermesInitialDocChecked && !isHoldQuery()) {
+      return "done";
+    }
+    return "loading";
+  });
   const [stepIdx, setStepIdx] = useState<number>(0);
   const [holdMode, setHoldMode] = useState<boolean>(false);
   const [runKey, setRunKey] = useState<number>(0);
@@ -148,8 +180,32 @@ export function BeFreakyPreloader() {
   useEffect(() => {
     if (phase === "done" || phase === "exiting") return;
 
-    const params = new URLSearchParams(window.location.search);
-    const shouldHold = params.get("loader") === "hold";
+    const shouldHold = isHoldQuery();
+    const isInitialCheck = runKey === 0 && !window.__hermesInitialDocChecked;
+    if (runKey === 0) {
+      if (window.__hermesInitialDocChecked && !shouldHold) {
+        setPhase("done");
+        return;
+      }
+      window.__hermesInitialDocChecked = true;
+    }
+
+    let seenBefore = false;
+    try {
+      seenBefore = window.sessionStorage.getItem(PRELOADER_SEEN_KEY) === "1";
+      window.sessionStorage.setItem(PRELOADER_SEEN_KEY, "1");
+    } catch {
+      // Ignore storage access errors
+    }
+
+    const navType = getNavigationType();
+    const isFreshVisitOrReload = !seenBefore || navType === "reload";
+
+    if (isInitialCheck && !shouldHold && !isFreshVisitOrReload) {
+      setPhase("done");
+      return;
+    }
+
     setHoldMode(shouldHold);
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;

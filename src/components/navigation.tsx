@@ -2,7 +2,11 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { GitHubPixelIcon, HuggingFacePixelIcon, LinkedInPixelIcon } from "./nous-logos";
+
+let spaPushFn: ((url: string) => void) | null = null;
 
 export type NavPreset = "Identity" | "Projects" | "Models" | "Connect";
 
@@ -29,7 +33,14 @@ export function smoothScrollToHash(href: string, event?: React.MouseEvent) {
 
   const targetId = href.slice(1);
   const el = document.getElementById(targetId);
-  if (!el) return;
+  if (!el) {
+    if (spaPushFn) {
+      spaPushFn(`/${href}`);
+    } else {
+      window.location.assign(`/${href}`);
+    }
+    return;
+  }
 
   const top = Math.max(0, el.getBoundingClientRect().top + window.scrollY - 64);
   window.scrollTo({ top, behavior });
@@ -96,39 +107,33 @@ const PRESET_SECTIONS: Record<NavPreset, SubnavSection[]> = {
         {
           label: "ChadGPT - 250M LLM",
           mutedPrefix: "Featured: ",
-          href: "https://huggingface.co/sam-eer12/chadGPT",
-          external: true,
-          description: "Custom 250M-parameter SLM with GQA, RoPE & 4k context",
+          href: "/projects/chadgpt",
+          description: "Custom 250M-parameter SLM with GQA, RoPE & 4k context docs",
         },
         {
           label: "AeroRoute",
-          href: "https://aeroroute.d1qrrcsa5p4lz3.amplifyapp.com/",
-          external: true,
-          description: "Real-time aerial & mobility route optimization platform",
+          href: "/projects/aeroroute",
+          description: "PM2.5 exposure route optimization (Shubh3155/AWS-DTU)",
         },
         {
           label: "NEXA - SIH2026 LiDAR",
-          href: "https://nexa-drdo.duckdns.org/",
-          external: true,
-          description: "DRDO 2.5D LiDAR perception (github.com/sam-eer12/sih2026)",
+          href: "/projects/nexa",
+          description: "DRDO 2.5D LiDAR perception architecture & benchmarks",
         },
         {
           label: "Amicus AI",
-          href: "https://amicusai.vercel.app/",
-          external: true,
-          description: "Location-aware legal advisor AI assistant",
+          href: "/projects/amicus-ai",
+          description: "Location-aware legal advisor & Ghost Vault architecture",
         },
         {
           label: "VigilAI Surveillance",
-          href: "https://github.com/sam-eer12/VigilAI-survillance-project",
-          external: true,
-          description: "94% accuracy YOLOv11 live anomaly detection system",
+          href: "/projects/vigilai",
+          description: "94% accuracy YOLOv11 multi-thread detection pipeline",
         },
         {
           label: "BitChord (PR #1414)",
-          href: "https://github.com/kushagrasinghx/BitChord/pull/1414",
-          external: true,
-          description: "Apple Music & provider routing open-source PR",
+          href: "/projects/bitchord",
+          description: "Apple Music integration & provider routing architecture",
         },
       ],
     },
@@ -237,31 +242,27 @@ interface PromoSlide {
 const PROMO_SLIDES: PromoSlide[] = [
   {
     id: "chadgpt",
-    label: "ChadGPT 250M SLM on Hugging Face",
-    href: "https://huggingface.co/sam-eer12/chadGPT",
+    label: "ChadGPT 250M SLM · Architecture & Mermaid Docs",
+    href: "/projects/chadgpt",
     icon: "https://web-assets.nousresearch.com/marketing/64ae3d30463049bd9e6f380cda9cd9538a0f4edb/assets/hermes-landing/teams/hermes-wing.svg",
-    external: true,
   },
   {
     id: "aeroroute",
-    label: "AeroRoute - Live Route Optimization",
-    href: "https://aeroroute.d1qrrcsa5p4lz3.amplifyapp.com/",
+    label: "AeroRoute · AWS-DTU PM2.5 Routing Architecture",
+    href: "/projects/aeroroute",
     icon: "https://web-assets.nousresearch.com/marketing/64ae3d30463049bd9e6f380cda9cd9538a0f4edb/assets/hermes-agent/globe.svg",
-    external: true,
   },
   {
     id: "nexa",
-    label: "NEXA - SIH2026 DRDO 2.5D LiDAR",
-    href: "https://nexa-drdo.duckdns.org/",
+    label: "NEXA · SIH2026 DRDO 2.5D LiDAR Blueprint",
+    href: "/projects/nexa",
     icon: "https://web-assets.nousresearch.com/marketing/64ae3d30463049bd9e6f380cda9cd9538a0f4edb/assets/hermes-agent/desktop.svg",
-    external: true,
   },
   {
     id: "bitchord",
-    label: "BitChord - Apple Music & Routing PR #1414",
-    href: "https://github.com/kushagrasinghx/BitChord/pull/1414",
+    label: "BitChord · Apple Music Routing PR #1414 Docs",
+    href: "/projects/bitchord",
     icon: "https://web-assets.nousresearch.com/marketing/64ae3d30463049bd9e6f380cda9cd9538a0f4edb/assets/hermes-agent/features.svg",
-    external: true,
   },
 ];
 
@@ -289,7 +290,15 @@ function PixelOpenIcon() {
   );
 }
 
-function PromoBanner({ initialSlide, active }: { initialSlide: number; active: boolean }) {
+function PromoBanner({
+  initialSlide,
+  active,
+  onNavigate,
+}: {
+  initialSlide: number;
+  active: boolean;
+  onNavigate?: () => void;
+}) {
   const [slideIdx, setSlideIdx] = useState(initialSlide);
   const [typedCount, setTypedCount] = useState(0);
   const [hoverFast, setHoverFast] = useState(false);
@@ -336,20 +345,32 @@ function PromoBanner({ initialSlide, active }: { initialSlide: number; active: b
       onMouseEnter={() => setHoverFast(true)}
       onMouseLeave={() => setHoverFast(false)}
     >
-      <a
-        className="promo-hit"
-        href={slide.href}
-        target={slide.external ? "_blank" : undefined}
-        rel={slide.external ? "noopener noreferrer" : undefined}
-      >
-        <div className="promo-brand flex items-center justify-center">
-          <img src={slide.icon} alt="" className="h-5 w-5 object-contain" />
-        </div>
-        <span className="promo-typed hw-mono truncate text-xs font-medium tracking-wider uppercase">
-          {slide.label.slice(0, typedCount)}
-          <span className="animate-pulse">_</span>
-        </span>
-      </a>
+      {slide.external || !slide.href.startsWith("/") ? (
+        <a
+          className="promo-hit"
+          href={slide.href}
+          target={slide.external ? "_blank" : undefined}
+          rel={slide.external ? "noopener noreferrer" : undefined}
+        >
+          <div className="promo-brand flex items-center justify-center">
+            <img src={slide.icon} alt="" className="h-5 w-5 object-contain" />
+          </div>
+          <span className="promo-typed hw-mono truncate text-xs font-medium tracking-wider uppercase">
+            {slide.label.slice(0, typedCount)}
+            <span className="animate-pulse">_</span>
+          </span>
+        </a>
+      ) : (
+        <Link className="promo-hit" href={slide.href} onClick={onNavigate}>
+          <div className="promo-brand flex items-center justify-center">
+            <img src={slide.icon} alt="" className="h-5 w-5 object-contain" />
+          </div>
+          <span className="promo-typed hw-mono truncate text-xs font-medium tracking-wider uppercase">
+            {slide.label.slice(0, typedCount)}
+            <span className="animate-pulse">_</span>
+          </span>
+        </Link>
+      )}
       <div className="flex shrink-0 items-center gap-1">
         <button
           type="button"
@@ -373,6 +394,8 @@ function PromoBanner({ initialSlide, active }: { initialSlide: number; active: b
 }
 
 export function MarketingNavigationProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [openPreset, setOpenPreset] = useState<NavPreset | null>(null);
   const [anchorRect, setAnchorRect] = useState<{ top: number; left: number; width: number } | null>(
@@ -385,6 +408,24 @@ export function MarketingNavigationProvider({ children }: { children: React.Reac
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    spaPushFn = (url: string) => router.push(url);
+    return () => {
+      spaPushFn = null;
+    };
+  }, [router]);
+
+  useEffect(() => {
+    if (pathname && pathname !== "/") {
+      (window as Window & { __hermesInitialDocChecked?: boolean }).__hermesInitialDocChecked = true;
+      try {
+        window.sessionStorage.setItem("hermes-preloader-seen", "1");
+      } catch {
+        // Ignore storage access errors
+      }
+    }
+  }, [pathname]);
 
   const cancelTimers = useCallback(() => {
     if (openTimerRef.current) {
@@ -489,7 +530,11 @@ export function MarketingNavigationProvider({ children }: { children: React.Reac
             onMouseEnter={cancelTimers}
             onMouseLeave={scheduleClose}
           >
-            <PromoBanner initialSlide={initialSlide} active={Boolean(openPreset)} />
+            <PromoBanner
+              initialSlide={initialSlide}
+              active={Boolean(openPreset)}
+              onNavigate={closeMenu}
+            />
             <div className="overflow-y-auto">
               {sections.map((sec) => (
                 <section
@@ -513,31 +558,50 @@ export function MarketingNavigationProvider({ children }: { children: React.Reac
                       {sec.heading}
                     </span>
                     <div className="nw-subnav-links flex flex-col gap-1 pb-3">
-                      {sec.links.map((item) => (
-                        <a
-                          key={item.label}
-                          href={item.href}
-                          target={item.external ? "_blank" : undefined}
-                          rel={item.external ? "noopener noreferrer" : undefined}
-                          download={item.download}
-                          onClick={(e) => {
-                            closeMenu();
-                            if (item.href.startsWith("#")) {
-                              smoothScrollToHash(item.href, e);
-                            }
-                          }}
-                          className="nw-subnav-link"
-                        >
-                          <span className="nw-subnav-label">
-                            {item.mutedPrefix ? (
-                              <span className="nw-label-muted">{item.mutedPrefix}</span>
-                            ) : null}
-                            {item.label}
-                          </span>
-                          <span className="nw-subnav-description">{item.description}</span>
-                          <PixelOpenIcon />
-                        </a>
-                      ))}
+                      {sec.links.map((item) => {
+                        const content = (
+                          <>
+                            <span className="nw-subnav-label">
+                              {item.mutedPrefix ? (
+                                <span className="nw-label-muted">{item.mutedPrefix}</span>
+                              ) : null}
+                              {item.label}
+                            </span>
+                            <span className="nw-subnav-description">{item.description}</span>
+                            <PixelOpenIcon />
+                          </>
+                        );
+                        if (!item.external && !item.download && item.href.startsWith("/")) {
+                          return (
+                            <Link
+                              key={item.label}
+                              href={item.href}
+                              onClick={closeMenu}
+                              className="nw-subnav-link"
+                            >
+                              {content}
+                            </Link>
+                          );
+                        }
+                        return (
+                          <a
+                            key={item.label}
+                            href={item.href}
+                            target={item.external ? "_blank" : undefined}
+                            rel={item.external ? "noopener noreferrer" : undefined}
+                            download={item.download}
+                            onClick={(e) => {
+                              closeMenu();
+                              if (item.href.startsWith("#")) {
+                                smoothScrollToHash(item.href, e);
+                              }
+                            }}
+                            className="nw-subnav-link"
+                          >
+                            {content}
+                          </a>
+                        );
+                      })}
                     </div>
                   </div>
                 </section>
@@ -650,25 +714,40 @@ function MobileMenuDrawer() {
                   <p className="hw-mono text-xs uppercase opacity-60">{preset}</p>
                   <div className="flex flex-col gap-2">
                     {PRESET_SECTIONS[preset].flatMap((s) =>
-                      s.links.map((l) => (
-                        <a
-                          key={l.label}
-                          href={l.href}
-                          target={l.external ? "_blank" : undefined}
-                          rel={l.external ? "noopener noreferrer" : undefined}
-                          download={l.download}
-                          onClick={(e) => {
-                            setOpen(false);
-                            if (l.href.startsWith("#")) {
-                              smoothScrollToHash(l.href, e);
-                            }
-                          }}
-                          className="flex items-center justify-between py-2 border-b border-dotted border-white/25"
-                        >
-                          <span className="hw-mono text-sm uppercase">{l.label}</span>
-                          <PixelOpenIcon />
-                        </a>
-                      ))
+                      s.links.map((l) => {
+                        if (!l.external && !l.download && l.href.startsWith("/")) {
+                          return (
+                            <Link
+                              key={l.label}
+                              href={l.href}
+                              onClick={() => setOpen(false)}
+                              className="flex items-center justify-between py-2 border-b border-dotted border-white/25"
+                            >
+                              <span className="hw-mono text-sm uppercase">{l.label}</span>
+                              <PixelOpenIcon />
+                            </Link>
+                          );
+                        }
+                        return (
+                          <a
+                            key={l.label}
+                            href={l.href}
+                            target={l.external ? "_blank" : undefined}
+                            rel={l.external ? "noopener noreferrer" : undefined}
+                            download={l.download}
+                            onClick={(e) => {
+                              setOpen(false);
+                              if (l.href.startsWith("#")) {
+                                smoothScrollToHash(l.href, e);
+                              }
+                            }}
+                            className="flex items-center justify-between py-2 border-b border-dotted border-white/25"
+                          >
+                            <span className="hw-mono text-sm uppercase">{l.label}</span>
+                            <PixelOpenIcon />
+                          </a>
+                        );
+                      })
                     )}
                   </div>
                 </div>
@@ -779,7 +858,7 @@ export function MarketingPaperNav() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const hero = document.querySelector(".landing-hero");
+    const hero = document.querySelector(".landing-hero, .hw-project-hero");
     const panel = document.querySelector(".hw-feature-panel");
     if (!panel && !hero) return;
 
