@@ -302,3 +302,38 @@ test("Each project description lives in src/descriptions/*.md with Mermaid diagr
     );
   }
 });
+
+test("Markdown preview renders inline <code> HTML tags and escaped pipes cleanly inside tables", () => {
+  const mdPreviewSrc = fs.readFileSync(
+    path.join(ROOT, "src", "components", "markdown-preview.tsx"),
+    "utf8"
+  );
+  assert.match(mdPreviewSrc, /decodeHtmlEntities/);
+  assert.match(mdPreviewSrc, /decodePlainMarkdownText/);
+  assert.match(mdPreviewSrc, /parseTableRow/);
+
+  const chadHtml = fs.readFileSync(
+    path.join(ROOT, ".next", "server", "app", "projects", "chadgpt.html"),
+    "utf8"
+  );
+  const tableMatch = chadHtml.match(/<table class="hw-md-table">[\s\S]*?endoftext[\s\S]*?<\/table>/);
+  assert.ok(tableMatch, "ChadGPT SSR HTML must render the ChatML tokenizer table");
+  const tokenTableHtml = tableMatch[0];
+  assert.ok(
+    tokenTableHtml.includes('<code class="hw-md-inline-code">&lt;|endoftext|&gt;</code>'),
+    "Tokenizer table must render <|endoftext|> inside .hw-md-inline-code"
+  );
+  assert.ok(
+    tokenTableHtml.includes('<code class="hw-md-inline-code">&lt;|im_start|&gt;</code>'),
+    "Tokenizer table must render <|im_start|> inside .hw-md-inline-code"
+  );
+  assert.ok(
+    tokenTableHtml.includes('<code class="hw-md-inline-code">&lt;|im_end|&gt;</code>'),
+    "Tokenizer table must render <|im_end|> inside .hw-md-inline-code"
+  );
+  assert.ok(
+    !tokenTableHtml.includes("&lt;code&gt;") && !tokenTableHtml.includes("&#124;"),
+    "Tokenizer table cells must not display raw <code> tags or undecoded &#124; entities"
+  );
+});
+

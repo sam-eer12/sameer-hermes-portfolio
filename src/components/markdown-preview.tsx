@@ -16,10 +16,93 @@ type MarkdownBlock =
   | { type: "blockquote"; lines: string[] }
   | { type: "hr" };
 
+const NAMED_HTML_ENTITIES: Record<string, string> = {
+  lt: "<",
+  LT: "<",
+  gt: ">",
+  GT: ">",
+  amp: "&",
+  AMP: "&",
+  quot: '"',
+  QUOT: '"',
+  apos: "'",
+  nbsp: "\u00a0",
+  verbar: "|",
+  vert: "|",
+  Vert: "\u2016",
+  lbrack: "[",
+  rbrack: "]",
+  lcub: "{",
+  rcub: "}",
+  ast: "*",
+  bsol: "\\",
+  sol: "/",
+  grave: "`",
+  ndash: "\u2013",
+  mdash: "\u2014",
+  hellip: "\u2026",
+  middot: "\u00b7",
+  times: "\u00d7",
+  copy: "\u00a9",
+  reg: "\u00ae",
+  trade: "\u2122",
+};
+
+function resolveEntityMatch(
+  full: string,
+  dec?: string,
+  hex?: string,
+  named?: string
+): string {
+  if (dec !== undefined) {
+    const cp = Number.parseInt(dec, 10);
+    if (!Number.isFinite(cp) || cp <= 0 || cp > 0x10ffff || (cp >= 0xd800 && cp <= 0xdfff)) {
+      return "\ufffd";
+    }
+    return String.fromCodePoint(cp);
+  }
+  if (hex !== undefined) {
+    const cp = Number.parseInt(hex, 16);
+    if (!Number.isFinite(cp) || cp <= 0 || cp > 0x10ffff || (cp >= 0xd800 && cp <= 0xdfff)) {
+      return "\ufffd";
+    }
+    return String.fromCodePoint(cp);
+  }
+  if (named !== undefined && Object.prototype.hasOwnProperty.call(NAMED_HTML_ENTITIES, named)) {
+    return NAMED_HTML_ENTITIES[named];
+  }
+  return full;
+}
+
+function decodeHtmlEntities(input: string): string {
+  return input.replace(
+    /&(?:#(\d+)|#[xX]([0-9a-fA-F]+)|([a-zA-Z][a-zA-Z0-9]*));/g,
+    (full, dec?: string, hex?: string, named?: string) =>
+      resolveEntityMatch(full, dec, hex, named)
+  );
+}
+
+function decodePlainMarkdownText(input: string): string {
+  return input.replace(
+    /\\([\\`*_{}[\]()#+\-.!|>~<&])|&(?:#(\d+)|#[xX]([0-9a-fA-F]+)|([a-zA-Z][a-zA-Z0-9]*));/g,
+    (full, escaped?: string, dec?: string, hex?: string, named?: string) => {
+      if (escaped !== undefined) {
+        return escaped;
+      }
+      return resolveEntityMatch(full, dec, hex, named);
+    }
+  );
+}
+
+function stripInlineSyntax(text: string): string {
+  return decodeHtmlEntities(
+    text.replace(/<\/?code(?:\s[^>]*)?>/gi, "").replace(/`+/g, "")
+  );
+}
+
 function slugify(text: string): string {
-  return text
+  return stripInlineSyntax(text)
     .toLowerCase()
-    .replace(/`+/g, "")
     .replace(/[^a-z0-9\s-]/g, "")
     .trim()
     .replace(/\s+/g, "-");
@@ -36,13 +119,73 @@ function isTableDivider(line: string): boolean {
   return cells.length > 0 && cells.every((c) => /^:?-{2,}:?$/.test(c));
 }
 
+function countPrecedingBackslashes(str: string, index: number): number {
+  let count = 0;
+  for (let i = index - 1; i >= 0 && str[i] === "\\"; i--) {
+    count++;
+  }
+  return count;
+}
+
 function parseTableRow(line: string): string[] {
-  return line
-    .trim()
-    .replace(/^\|/, "")
-    .replace(/\|$/, "")
-    .split("|")
-    .map((cell) => cell.trim());
+  let raw = line.trim();
+  if (raw.startsWith("|")) {
+    raw = raw.slice(1);
+  }
+  if (raw.endsWith("|") && countPrecedingBackslashes(raw, raw.length - 1) % 2 === 0) {
+    raw = raw.slice(0, -1);
+  }
+
+  const cells: string[] = [];
+  let current = "";
+  let i = 0;
+
+  while (i < raw.length) {
+    // Keep same-line <code>...</code> tags intact even if they contain literal '|'
+    if (raw[i] === "<") {
+      const rest = raw.slice(i);
+      const codeMatch = rest.match(/^<code(?:\s[^>]*)?>[\s\S]*?<\/code>/i);
+      if (codeMatch) {
+        current += codeMatch[0];
+        i += codeMatch[0].length;
+        continue;
+      }
+    }
+
+    if (raw[i] === "\\") {
+      let endBs = i;
+      while (endBs < raw.length && raw[endBs] === "\\") {
+        endBs++;
+      }
+      const bsCount = endBs - i;
+      if (endBs < raw.length && raw[endBs] === "|") {
+        if (bsCount % 2 === 1) {
+          current += "\\".repeat(bsCount - 1) + "|";
+          i = endBs + 1;
+          continue;
+        }
+        current += raw.slice(i, endBs);
+        i = endBs;
+        continue;
+      }
+      current += raw.slice(i, endBs);
+      i = endBs;
+      continue;
+    }
+
+    if (raw[i] === "|") {
+      cells.push(current.trim());
+      current = "";
+      i++;
+      continue;
+    }
+
+    current += raw[i];
+    i++;
+  }
+
+  cells.push(current.trim());
+  return cells;
 }
 
 function parseMarkdown(source: string): MarkdownBlock[] {
@@ -109,7 +252,7 @@ function parseMarkdown(source: string): MarkdownBlock[] {
     if (headingMatch) {
       const level = headingMatch[1].length as 1 | 2 | 3 | 4;
       const text = headingMatch[2].trim();
-      if (level <= 3) lastHeading = text.replace(/`/g, "");
+      if (level <= 3) lastHeading = stripInlineSyntax(text);
       blocks.push({
         type: "heading",
         level,
@@ -203,14 +346,15 @@ function parseMarkdown(source: string): MarkdownBlock[] {
 
 function renderInline(text: string): React.ReactNode[] {
   const nodes: React.ReactNode[] = [];
-  const pattern = /(\[[^\]]+\]\([^)]+\)|`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*)/g;
+  const pattern =
+    /(\[[^\]]+\]\([^)]+\)|`[^`]+`|<code(?:\s[^>]*)?>[\s\S]*?<\/code>|\*\*[^*]+\*\*|\*[^*]+\*)/gi;
   let lastIdx = 0;
   let match: RegExpExecArray | null;
   let keyIdx = 0;
 
   while ((match = pattern.exec(text)) !== null) {
     if (match.index > lastIdx) {
-      nodes.push(text.slice(lastIdx, match.index));
+      nodes.push(decodePlainMarkdownText(text.slice(lastIdx, match.index)));
     }
     const token = match[0];
     if (token.startsWith("[")) {
@@ -226,11 +370,11 @@ function renderInline(text: string): React.ReactNode[] {
             rel={isExternal ? "noopener noreferrer" : undefined}
             className="hw-md-inline-link"
           >
-            {label}
+            {renderInline(label)}
           </a>
         );
       } else {
-        nodes.push(token);
+        nodes.push(decodePlainMarkdownText(token));
       }
     } else if (token.startsWith("`")) {
       nodes.push(
@@ -238,6 +382,17 @@ function renderInline(text: string): React.ReactNode[] {
           {token.slice(1, -1)}
         </code>
       );
+    } else if (/^<code(?:\s[^>]*)?>/i.test(token)) {
+      const codeTagMatch = token.match(/^<code(?:\s[^>]*)?>([\s\S]*?)<\/code>$/i);
+      if (codeTagMatch) {
+        nodes.push(
+          <code key={`htmlcode-${keyIdx++}`} className="hw-md-inline-code">
+            {decodeHtmlEntities(codeTagMatch[1])}
+          </code>
+        );
+      } else {
+        nodes.push(decodePlainMarkdownText(token));
+      }
     } else if (token.startsWith("**")) {
       nodes.push(<strong key={`b-${keyIdx++}`}>{renderInline(token.slice(2, -2))}</strong>);
     } else if (token.startsWith("*")) {
@@ -247,7 +402,7 @@ function renderInline(text: string): React.ReactNode[] {
   }
 
   if (lastIdx < text.length) {
-    nodes.push(text.slice(lastIdx));
+    nodes.push(decodePlainMarkdownText(text.slice(lastIdx)));
   }
   return nodes;
 }
@@ -627,7 +782,7 @@ export function ProjectMarkdownExplorer({ project }: { project: ProjectData }) {
                         h.level === 3 ? "pl-3 text-xs opacity-75" : "text-xs font-medium"
                       }`}
                     >
-                      {h.text.replace(/`/g, "")}
+                      {stripInlineSyntax(h.text)}
                     </a>
                   ))}
                 </nav>
