@@ -65,9 +65,9 @@ The base GPT-2 BPE tokenizer (`50,257` tokens) was extended via `SLM/chatml_toke
 
 | Token | ID | Function |
 |---|---|---|
-| `<|endoftext|>` | `50256` | Document separator & sequence padding during packing |
-| `<|im_start|>` | `50257` | Delimits start of `system`, `user`, or `assistant` turn |
-| `<|im_end|>` | `50258` | Turn terminator & autoregressive generation stop token |
+| `<\|endoftext\|>` | `50256` | Document separator & sequence padding during packing |
+| `<\|im_start\|>` | `50257` | Delimits start of `system`, `user`, or `assistant` turn |
+| `<\|im_end\|>` | `50258` | Turn terminator & autoregressive generation stop token |
 
 During Phase 3 SFT (`SLM/prepare_openhermes_sft.py`), conversations across coding, mathematics, reasoning, STEM, writing, roleplay, and multilingual tasks are packed into `4,097`-token rows. Document-boundary position resets prevent cross-conversation attention leakage, while cross-entropy loss is masked strictly to assistant tokens and their closing `<|im_end|>` marker.
 
