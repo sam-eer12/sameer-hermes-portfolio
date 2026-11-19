@@ -14,6 +14,7 @@ import {
   type AccordionItemData,
 } from "./sections-client";
 import {
+  ArrowRightIcon,
   GitHubPixelIcon,
   HuggingFacePixelIcon,
   LinkedInPixelIcon,
@@ -386,29 +387,29 @@ export function ProjectsSection() {
                 <div className="flex flex-wrap items-center gap-2 pt-1 text-xs font-medium">
                   <Link
                     href={`/projects/${proj.slug}`}
-                    className="inline-flex items-center gap-1.5 border border-[var(--hermes-primary)]/40 bg-[var(--hermes-primary)] px-2.5 py-1 text-white transition-colors hover:bg-[var(--hw-accent-pink)] hover:text-[#0d0d1a] hover:border-[var(--hw-accent-pink)]"
+                    className="hw-project-card-cta inline-flex items-center gap-1.5 px-2.5 py-1"
                   >
                     <span>Docs &amp; Diagrams</span>
-                    <span aria-hidden="true">-&gt;</span>
+                    <ArrowRightIcon className="size-3.5 shrink-0" />
                   </Link>
                   <a
                     href={proj.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 border border-current/30 px-2.5 py-1 transition-colors hover:border-[var(--hermes-primary)] hover:text-[var(--hermes-primary)]"
+                    className="hw-project-card-link inline-flex items-center gap-1.5 px-2.5 py-1"
                   >
                     <span>{proj.primaryLabel}</span>
-                    <span aria-hidden="true">-&gt;</span>
+                    <ArrowRightIcon className="size-3.5 shrink-0" />
                   </a>
                   {proj.secondaryHref && proj.secondaryLabel ? (
                     <a
                       href={proj.secondaryHref}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 border border-current/30 px-2.5 py-1 transition-colors hover:border-[var(--hermes-primary)] hover:text-[var(--hermes-primary)]"
+                      className="hw-project-card-link inline-flex items-center gap-1.5 px-2.5 py-1"
                     >
                       <span>{proj.secondaryLabel}</span>
-                      <span aria-hidden="true">-&gt;</span>
+                      <ArrowRightIcon className="size-3.5 shrink-0" />
                     </a>
                   ) : null}
                 </div>

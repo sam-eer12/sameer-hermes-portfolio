@@ -14,6 +14,7 @@ import {
   MarketingNavigationProvider,
   MarketingPaperNav,
 } from "../../../components/navigation";
+import { ArrowLeftIcon, ArrowRightIcon } from "../../../components/nous-logos";
 import { MarketingFooterReveal, PaperFooter } from "../../../components/sections";
 import { ProjectCliBar } from "../../../components/sections-client";
 import {
@@ -107,9 +108,9 @@ export default async function ProjectDetailPage({
                   <div className="hw-project-breadcrumb">
                     <Link
                       href="/#features"
-                      className="inline-flex items-center gap-2 hw-mono text-xs uppercase tracking-[0.1em] text-[var(--hermes-white)]/85 hover:text-[var(--hw-accent-pink)] transition-colors"
+                      className="hw-project-back-link inline-flex items-center gap-2 hw-mono text-xs uppercase tracking-[0.1em]"
                     >
-                      <span aria-hidden="true">&lt;-</span>
+                      <ArrowLeftIcon className="size-4 shrink-0" />
                       <span>Back to Selected Projects</span>
                     </Link>
 
@@ -137,7 +138,7 @@ export default async function ProjectDetailPage({
 
                       <p
                         data-type-role="copy"
-                        className="max-w-[54ch] text-[color:color-mix(in_srgb,var(--hermes-white)_88%,transparent)]"
+                        className="hw-project-subtitle max-w-[54ch]"
                         style={{
                           fontFamily: "var(--font-body)",
                           fontSize: "clamp(1rem, 1.35vw, 1.2rem)",
@@ -152,7 +153,7 @@ export default async function ProjectDetailPage({
                         {project.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="inline-flex items-center border border-white/25 px-2.5 py-1 hw-mono text-[11px] uppercase tracking-[0.06em] text-white/90"
+                            className="hw-project-tag inline-flex items-center px-2.5 py-1 hw-mono text-[11px] uppercase"
                           >
                             {tag}
                           </span>
@@ -162,12 +163,7 @@ export default async function ProjectDetailPage({
                       <div className="flex flex-wrap items-center gap-2.5 pt-1">
                         {project.links.map((lnk) => {
                           const variant = lnk.variant ?? "outline";
-                          const cls =
-                            variant === "primary"
-                              ? "hermes-button group relative inline-flex cursor-pointer items-center justify-center rounded-none border-0 bg-clip-padding outline-none select-none font-[family-name:var(--font-mono)] tracking-[0.08em] uppercase transition-[background-color,box-shadow,color,transform] duration-150 ease-out hover:duration-0 active:scale-[0.98] hermes-button-size-m bg-[color-mix(in_srgb,var(--hermes-paper)_92%,transparent)] text-[var(--hpv2-brand,var(--hermes-primary))] hover:bg-[var(--hermes-paper)] hover:shadow-[var(--hpv2-shadow-lift)] gap-2 px-3.5 py-2.5 text-xs"
-                              : variant === "secondary"
-                              ? "hermes-button group relative inline-flex cursor-pointer items-center justify-center rounded-none border border-white/45 bg-white/10 outline-none select-none font-[family-name:var(--font-mono)] tracking-[0.08em] uppercase transition-[background-color,box-shadow,color,transform] duration-150 ease-out hover:duration-0 active:scale-[0.98] hermes-button-size-m text-[var(--hermes-white)] hover:bg-white/20 gap-2 px-3.5 py-2.5 text-xs"
-                              : "hermes-button group relative inline-flex cursor-pointer items-center justify-center rounded-none border border-white/25 bg-transparent outline-none select-none font-[family-name:var(--font-mono)] tracking-[0.08em] uppercase transition-[background-color,box-shadow,color,transform] duration-150 ease-out hover:duration-0 active:scale-[0.98] hermes-button-size-m text-[var(--hermes-white)]/85 hover:bg-white/10 gap-2 px-3 py-2 text-xs";
+                          const cls = `hermes-button hw-project-btn hw-project-btn--${variant} group relative inline-flex cursor-pointer items-center justify-center rounded-none bg-clip-padding outline-none select-none font-[family-name:var(--font-mono)] uppercase transition-[background-color,border-color,box-shadow,color,transform] duration-150 ease-out hover:duration-0 active:scale-[0.98] hermes-button-size-m gap-2`;
                           return (
                             <a
                               key={lnk.label}
@@ -180,18 +176,13 @@ export default async function ProjectDetailPage({
                               className={cls}
                             >
                               <span className="leading-none whitespace-nowrap cap-mono text-cap-trim">
-                                {lnk.label} -&gt;
+                                {lnk.label}
                               </span>
+                              <ArrowRightIcon className="size-4 shrink-0" />
+                              <span aria-hidden="true" className="hermes-button-hover-border" />
                             </a>
                           );
                         })}
-
-                        <a
-                          href="#architecture"
-                          className="inline-flex items-center gap-1.5 px-2.5 py-2 hw-mono text-xs uppercase tracking-[0.08em] text-[var(--hw-accent-pink)] underline underline-offset-4 hover:text-white transition-colors"
-                        >
-                          Jump to Mermaid Docs
-                        </a>
                       </div>
 
                       <ProjectCliBar command={project.cliCommand} />
@@ -250,12 +241,12 @@ export default async function ProjectDetailPage({
               </section>
 
               <div className="hw-feature-parallax relative z-30">
-                <div className="hw-feature-panel bg-hermes-paper relative z-20 w-full overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.35)]">
+                <div className="hw-feature-panel bg-hermes-paper text-[var(--hw-teams-ink)] relative z-20 w-full overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.35)]">
                   <ProjectMarkdownExplorer project={project} />
 
                   <section
                     aria-label="Project Navigation"
-                    className="bg-hermes-paper hw-project-explore-section"
+                    className="bg-hermes-paper hw-project-explore-section text-[var(--hw-teams-ink)]"
                   >
                     <div className="mx-auto w-full max-w-[calc(var(--hw-teams-col)+2*var(--hw-teams-pad-x))] px-[var(--hw-teams-pad-x)] hw-project-explore-inner">
                       <div className="hw-project-explore-header">
@@ -272,16 +263,18 @@ export default async function ProjectDetailPage({
                         </h2>
                         <Link
                           href="/#features"
-                          className="hw-mono text-xs uppercase tracking-[0.08em] text-[var(--hermes-primary)] underline underline-offset-4"
+                          className="inline-flex items-center gap-1.5 hw-mono text-xs uppercase tracking-[0.08em] text-[var(--hermes-primary)] underline underline-offset-4"
                         >
-                          All 6 Systems on Home -&gt;
+                          <span>All 6 Systems on Home</span>
+                          <ArrowRightIcon className="size-3.5 shrink-0" />
                         </Link>
                       </div>
 
                       <div className="hw-project-pager-grid">
                         <Link href={`/projects/${prev.slug}`} className="hw-project-pager-card">
-                          <span className="hw-mono text-[11px] uppercase tracking-[0.1em] opacity-65">
-                            &lt;- Previous Project · {prev.order}
+                          <span className="hw-project-pager-kicker inline-flex items-center gap-1.5 hw-mono text-[11px] uppercase tracking-[0.1em]">
+                            <ArrowLeftIcon className="size-3.5 shrink-0" />
+                            <span>Previous Project · {prev.order}</span>
                           </span>
                           <span
                             className="text-[var(--hw-teams-ink)]"
@@ -294,15 +287,16 @@ export default async function ProjectDetailPage({
                           >
                             {prev.title}
                           </span>
-                          <span className="text-xs opacity-75">{prev.indexLabel}</span>
+                          <span className="hw-project-pager-sub text-xs">{prev.indexLabel}</span>
                         </Link>
 
                         <Link
                           href={`/projects/${next.slug}`}
                           className="hw-project-pager-card text-right items-end"
                         >
-                          <span className="hw-mono text-[11px] uppercase tracking-[0.1em] opacity-65">
-                            Next Project · {next.order} -&gt;
+                          <span className="hw-project-pager-kicker inline-flex items-center gap-1.5 hw-mono text-[11px] uppercase tracking-[0.1em]">
+                            <span>Next Project · {next.order}</span>
+                            <ArrowRightIcon className="size-3.5 shrink-0" />
                           </span>
                           <span
                             className="text-[var(--hw-teams-ink)]"
@@ -315,7 +309,7 @@ export default async function ProjectDetailPage({
                           >
                             {next.title}
                           </span>
-                          <span className="text-xs opacity-75">{next.indexLabel}</span>
+                          <span className="hw-project-pager-sub text-xs">{next.indexLabel}</span>
                         </Link>
                       </div>
 
@@ -327,11 +321,7 @@ export default async function ProjectDetailPage({
                               key={item.slug}
                               href={`/projects/${item.slug}`}
                               aria-current={isCurrent ? "page" : undefined}
-                              className={`inline-flex items-center gap-1.5 border px-3 py-1.5 hw-mono text-xs uppercase tracking-[0.06em] transition-colors ${
-                                isCurrent
-                                  ? "border-[var(--hermes-primary)] bg-[var(--hermes-primary)] text-white"
-                                  : "border-current/25 text-[var(--hw-teams-ink)] hover:border-[var(--hermes-primary)] hover:text-[var(--hermes-primary)]"
-                              }`}
+                              className="hw-project-pill inline-flex items-center gap-1.5 px-3 py-1.5 hw-mono text-xs uppercase"
                             >
                               <span>{item.order}</span>
                               <span>{item.title}</span>

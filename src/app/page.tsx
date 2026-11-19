@@ -47,7 +47,7 @@ export default function PortfolioPage() {
               <ShowcaseSection />
 
               <div className="hw-feature-parallax relative z-30">
-                <div className="hw-feature-panel bg-hermes-paper relative z-20 w-full overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.35)]">
+                <div className="hw-feature-panel bg-hermes-paper text-[var(--hw-teams-ink)] relative z-20 w-full overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.35)]">
                   <ProjectsSection />
                   <ExperienceFaqSection />
                   <SkillsPortalSection />

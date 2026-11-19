@@ -72,3 +72,19 @@ export function LinkedInPixelIcon({ className = "size-4" }: { className?: string
     </svg>
   );
 }
+
+export function ArrowRightIcon({ className = "size-4 shrink-0" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className={className}>
+      <path d="M14 18l-1.4-1.45L16.15 13H4v-2h12.15L12.6 7.45L14 6l6 6-6 6z" />
+    </svg>
+  );
+}
+
+export function ArrowLeftIcon({ className = "size-4 shrink-0" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className={className}>
+      <path d="M10 18l-6-6 6-6 1.4 1.45L7.85 11H20v2H7.85l3.55 3.55L10 18z" />
+    </svg>
+  );
+}

@@ -610,7 +610,7 @@ function MermaidDiagram({
           <span className="hw-mermaid-badge">
             MERMAID · {String(index).padStart(2, "0")}
           </span>
-          <figcaption className="hw-mono text-xs truncate opacity-85">{title}</figcaption>
+          <figcaption className="hw-mono text-xs truncate opacity-80">{title}</figcaption>
         </div>
 
         <div className="flex flex-wrap items-center gap-1.5">
@@ -662,7 +662,7 @@ function MermaidDiagram({
       ) : (
         <div className="hw-mermaid-viewport">
           {status === "loading" && (
-            <p className="hw-mono text-xs opacity-65 py-6 text-center">
+            <p className="hw-mono text-xs opacity-70 py-6 text-center">
               Rendering Mermaid chart...
             </p>
           )}
@@ -726,13 +726,13 @@ export function ProjectMarkdownExplorer({ project }: { project: ProjectData }) {
     <section
       id="architecture"
       aria-label={`${project.title} Markdown Documentation`}
-      className="bg-hermes-paper hw-md-section"
+      className="bg-hermes-paper hw-md-section text-[var(--hw-teams-ink)]"
     >
       <div className="mx-auto w-full max-w-[calc(var(--hw-teams-col)+2*var(--hw-teams-pad-x))] px-[var(--hw-teams-pad-x)]">
         <div className="hw-md-toolbar">
           <div className="flex flex-wrap items-center gap-3">
             <span className="hw-md-file-pill">README.md</span>
-            <span className="hw-mono text-xs uppercase tracking-wider opacity-75">
+            <span className="hw-mono text-xs uppercase tracking-wider opacity-80">
               Markdown Preview · {mermaidBlocks.length} Mermaid Diagrams
             </span>
           </div>
@@ -770,7 +770,7 @@ export function ProjectMarkdownExplorer({ project }: { project: ProjectData }) {
           {mode === "preview" && headings.length > 0 && (
             <aside aria-label="Document outline" className="hw-md-sidebar">
               <div className="hw-md-toc-box">
-                <p className="hw-mono text-[11px] uppercase tracking-[0.12em] opacity-65 mb-3">
+                <p className="hw-mono text-[11px] uppercase tracking-[0.12em] opacity-70 mb-3">
                   Sections
                 </p>
                 <nav className="flex flex-col gap-1.5">
@@ -779,7 +779,7 @@ export function ProjectMarkdownExplorer({ project }: { project: ProjectData }) {
                       key={h.id}
                       href={`#${h.id}`}
                       className={`hw-md-toc-link ${
-                        h.level === 3 ? "pl-3 text-xs opacity-75" : "text-xs font-medium"
+                        h.level === 3 ? "pl-3 text-xs opacity-80" : "text-xs font-medium"
                       }`}
                     >
                       {stripInlineSyntax(h.text)}
